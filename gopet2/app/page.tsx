@@ -1,3 +1,5 @@
+"use client";
+import AdoptEmblaCarousel from "./components/AdoptEmblaCarousel";
 import Header from "./components/Header";
 import HotelShelter from "./components/HotelShelter";
 import { useToggleNav } from "./components/useToggleNav";
