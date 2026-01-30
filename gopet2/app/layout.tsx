@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import PageUpButton from "./components/PageUpButton";
 import Providers from "./Providers";
@@ -15,7 +16,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body style={{ backgroundImage: "url('/images/gopet2_back.png')", backgroundSize: '70%',
+      backgroundPosition: 'center', backgroundRepeat: 'repeat',}}>
         <Providers>
           {children}
         </Providers>

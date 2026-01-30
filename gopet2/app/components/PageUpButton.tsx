@@ -27,7 +27,7 @@ const PageUpButton = () => {
         w-12 h-12 rounded-full
         bg-black text-white text-xl
         flex items-center justify-center
-        transition-opacity
+        transition-opacity border-2 border-white
         hidden sm:flex
       "
       title="맨 위로"

@@ -1,8 +1,11 @@
 "use client";
 import AdoptEmblaCarousel from "./components/AdoptEmblaCarousel";
+import Festival from "./components/Festival";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
-import HotelShelter from "./components/HotelShelter";
+import NewsList from "./components/NewsList";
 import { useToggleNav } from "./components/useToggleNav";
+import "./globals.css";
 
 const OPTIONS = { loop: true }
 const SLIDE_COUNT = 8
@@ -13,8 +16,11 @@ export default function Home() {
   return (
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav}/>
-      <HotelShelter/>
+      {/* <HotelShelter/> */}
+      <Festival/>
+      <NewsList/>
       <AdoptEmblaCarousel slides={SLIDES} options={OPTIONS}/>
+      <Footer/>
     </>
   );
 }
