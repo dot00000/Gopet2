@@ -4,7 +4,7 @@ import Festival from "./components/Festival";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NewsList from "./components/NewsList";
-import { useToggleNav } from "./components/useToggleNav";
+import { useToggleNav } from "./hooks/useToggleNav";
 import "./globals.css";
 
 const OPTIONS = { loop: true }

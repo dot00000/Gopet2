@@ -48,7 +48,6 @@ const KcisaApi = async(categoryFilter) => {
             return null;
           }
           
-    
           if (isNaN(lat) || isNaN(lng)) return null;
           
           return {
@@ -64,7 +63,6 @@ const KcisaApi = async(categoryFilter) => {
             category2: item.category2,
             description: item.description,
             charge: item.charge,
-
           };
         })
         .filter(Boolean);
