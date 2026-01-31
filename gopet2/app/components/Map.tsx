@@ -37,7 +37,7 @@ export default function Map({
       <div
         className="flex"
         id={mapId}
-        style={{ width: "100%", height: "800px", position: "relative" }}
+        style={{ width: "100%", height: "100vh", position: "relative" }}
       />
 
       <Script
