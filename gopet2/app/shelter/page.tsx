@@ -138,8 +138,8 @@ export default function Shelter() {
           <hr className="border-t border-gray-300 my-4" />
           <div className="flex justify-center items-center mb-5">
             <div
-              className="flex flex-col items-center mb-4"
-              style={{ height: "800px", overflowY: "scroll" }}
+              className="flex flex-col items-center mb-4 no-scrollbar"
+              style={{ height: "950px" }}
             >
               {currentItems.map((data: any, index: any) => (
                 <div
@@ -164,7 +164,7 @@ export default function Shelter() {
               ))}
 
             {/* pagination */}
-            <section className="flex justify-center items-center space-x-2 my-5 pb-20">
+            <section className="flex justify-center items-center space-x-2 my-5 pt-10">
               <button
                 onClick={() => setCurrentPage(startPage - 1)}
                 disabled={startPage === 1}

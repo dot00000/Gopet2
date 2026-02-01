@@ -83,6 +83,16 @@ body {
   transition: 0.3s;
 }
 
+.no-scrollbar {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+
 /* cross */
 .cross .bar:nth-of-type(1) {
   transform: translateY(12px) rotate(-45deg);
