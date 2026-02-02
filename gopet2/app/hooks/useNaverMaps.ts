@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from "react";
 import { Coordinates } from "../components/types/store";
-type PlaceType = "hospital" | "park" | "cafe" | "food";
 
 const naverMapsConfig = {
     naverMapId: process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID
@@ -8,12 +7,6 @@ const naverMapsConfig = {
 export const INITIAL_CENTER: Coordinates = [37.5262411, 126.99289439];
 export const INITIAL_ZOOM = 10;
 
-// export const markerIcons: Record<PlaceType, string> = {
-  //     hospital: "/picture_images/map/animalhospital_marker.png",
-  //     park: "/picture_images/map/park_marker.png",
-  //     cafe: "/picture_images/map/cafe_marker.png",
-  //     food: "/picture_images/map/food_marker.png",
-  // }
   
   export function useNaverMaps() {
   const mapRef = useRef<naver.maps.Map | null>(null);
@@ -29,6 +22,11 @@ export const INITIAL_ZOOM = 10;
       zoom: INITIAL_ZOOM,
       zoomControl: false,
       mapTypeControl: false,
+      mapDataControl: false,
+      scaleControl: false,
+      logoControlOptions: {
+        position: window.naver.maps.Position.RIGHT_TOP,
+      }
     });
 
     mapRef.current = map;
@@ -37,25 +35,6 @@ export const INITIAL_ZOOM = 10;
   return { initMap, mapRef };
 
   }
-//   const infoRef = useRef<naver.maps.InfoWindow | null>(null);
-//     const center = new window.naver.maps.LatLng(
-//       INITIAL_CENTER[0],
-//       INITIAL_CENTER[1],
-//     );
-//     const mapOptions = {
-//       center,
-//       zoom: INITIAL_ZOOM,
-//       scaleControl: false,
-//       logoControlOptions: {
-//         position: window.naver.maps.Position.RIGHT_TOP,
-//       },
-//       mapDataControl: false,
-//       zoomControl: false,
-//       mapTypeControl: false,
-//     };
-//     const map = new window.naver.maps.Map(mapId, mapOptions);
-//     mapRef.current = map;
-// }
 
 // 마커 변경하기
 // export function createMarker() {

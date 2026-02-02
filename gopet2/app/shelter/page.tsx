@@ -164,7 +164,7 @@ export default function Shelter() {
               ))}
 
             {/* pagination */}
-            <section className="flex justify-center items-center space-x-2 my-5 pt-10">
+            <section className="flex justify-center items-center space-x-2 my-5">
               <button
                 onClick={() => setCurrentPage(startPage - 1)}
                 disabled={startPage === 1}
@@ -172,7 +172,6 @@ export default function Shelter() {
               >
                 <IoIosArrowBack />
               </button>
-
               {pageNumbers.map((number) => (
                 <button
                   key={number}
@@ -211,7 +210,8 @@ export default function Shelter() {
         <Map />
         {/* SideBar (Map 위에 포개짐) */}
         <div className="absolute top-0 left-0 h-screen">
-          <div className="w-[500px] h-full pointer-events-auto overflow-visible">
+        
+          <div className="w-[560px] h-full pointer-events-auto overflow-visible">
             <div className="swiper relative" style={{ height: "100%" }}>
               <div className="swiper-wrapper">
                 <div className="swiper-slide menu">
@@ -252,7 +252,9 @@ export default function Shelter() {
           </div>
         </div>
       </section>
-      <Footer />
+      <section className="z-20">
+        <Footer />
+      </section>
     </>
   );
 }
