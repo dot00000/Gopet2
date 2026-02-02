@@ -69,7 +69,7 @@ const Adaoption = () => {
   return (
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
-      <h1 className="flex justify-center text-3xl mb-10 mt-10">💗 유기동물 입양</h1>
+      <h1 className="flex justify-center text-3xl mb-10 mt-10">💗 보호소 입양</h1>
       
       {/* 카드 리스트 섹션 */}
       <section className="flex justify-center items-start min-h-[700px]">

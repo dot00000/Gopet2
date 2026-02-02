@@ -194,7 +194,7 @@ export default function Map({ mapId = "map"}) {
           className={`flex justify-center items-center px-4 py-2 rounded-2xl transition
             ${isOpen ? "bg-blue-500 text-white" : "bg-white/60 text-black"}`}
           onClick={handleShelterLocation}
-          style={{ position: "absolute", top: 10, left: "40%", zIndex: 999 }}
+          style={{ position: "absolute", top: 10, left: "60%", zIndex: 999 }}
         >
           {isOpen ? "보호소" : "보호소"}
         </button>

@@ -4,7 +4,7 @@ import Image from "next/image";
 const NavBar: React.FC = () => {
   return (
     <nav className="flex gap-4 p-4 bg-gray-100 text-center justify-center">
-      <Link href="/hotel" className="w-1/6 min-w-[100px]">
+      {/* <Link href="/hotel" className="w-1/6 min-w-[100px]">
         <div className={styles.nav_box}>
           <Image src="/images/navmenu/hotel.png" alt="숙박 아이콘" width={110} height={20} className="border-10"/>
           <h2 className={styles.nav_font}>숙 박</h2>
@@ -16,7 +16,7 @@ const NavBar: React.FC = () => {
           "/>
           <h2 className={styles.nav_font}>지 도</h2>
         </div>
-      </Link>
+      </Link> */}
       <Link href="/adoption" className="w-1/6 min-w-[100px]">
         <div className={styles.nav_box}>
           <Image src="/images/navmenu/adopt.png" alt="체험 아이콘" width={110} height={20} className="border-10
