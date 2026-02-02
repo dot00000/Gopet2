@@ -139,7 +139,6 @@ export default function Shelter() {
           <div className="flex justify-center items-center mb-5">
             <div
               className="flex flex-col items-center mb-4 no-scrollbar"
-              style={{ height: "950px" }}
             >
               {currentItems.map((data: any, index: any) => (
                 <div
@@ -164,7 +163,7 @@ export default function Shelter() {
               ))}
 
             {/* pagination */}
-            <section className="flex justify-center items-center space-x-2 my-5">
+            <section className="flex justify-center items-center space-x-2 my-15">
               <button
                 onClick={() => setCurrentPage(startPage - 1)}
                 disabled={startPage === 1}
@@ -206,15 +205,14 @@ export default function Shelter() {
   return (
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
-      <section className="relative h-screen">
+      <section className="relative min-h-screen">
         <Map />
         {/* SideBar (Map 위에 포개짐) */}
-        <div className="absolute top-0 left-0 h-screen">
-        
-          <div className="w-[560px] h-full pointer-events-auto overflow-visible">
-            <div className="swiper relative" style={{ height: "100%" }}>
+        <div className="absolute top-0 left-0 min-h-screen z-10">
+          <div className="w-[560px]">
+            <div className="swiper relative">
               <div className="swiper-wrapper">
-                <div className="swiper-slide menu">
+                <div className="swiper-slide menu h-full">
                   <ul className="flex justify-start items-center py-5">
                     {tabs.map((tab) => (
                       <li
@@ -251,10 +249,9 @@ export default function Shelter() {
             </div>
           </div>
         </div>
+        <Footer/>
       </section>
-      <section className="z-20">
-        <Footer />
-      </section>
+      
     </>
   );
 }

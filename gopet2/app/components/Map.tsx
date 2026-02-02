@@ -19,8 +19,7 @@ export default function Map({ mapId = "map" }) {
   }
   return (
     <>
-      <div id={mapId} className="w-full h-screen" />
-
+      <div id={mapId} className="w-full h-[1000px]" />
       <Script
         src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}&submodules=geocoder`}
         strategy="afterInteractive"

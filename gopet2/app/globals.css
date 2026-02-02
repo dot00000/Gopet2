@@ -29,6 +29,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Juache', sans-serif !important;
+  height: 100%;
 }
 
 .swiper {
@@ -74,8 +75,6 @@ body {
   cursor: pointer;
   transition: 0.3s;
   background-color: #111828;
-  z-index: 9999;
-
 }
 
 .bar {
