@@ -10,6 +10,7 @@ export const INITIAL_ZOOM = 10;
   
   export function useNaverMaps() {
   const mapRef = useRef<naver.maps.Map | null>(null);
+  const infoRaf = useRef<naver.maps.InfoWindow | null>(null);
 
   const initMap = useCallback((mapId: string) => {
     if (!window.naver || mapRef.current) return;
@@ -26,15 +27,15 @@ export const INITIAL_ZOOM = 10;
       scaleControl: false,
       logoControlOptions: {
         position: window.naver.maps.Position.RIGHT_TOP,
-      }
+      },
     });
 
     mapRef.current = map;
   }, []);
 
   return { initMap, mapRef };
+}
 
-  }
 
 // 마커 변경하기
 // export function createMarker() {
