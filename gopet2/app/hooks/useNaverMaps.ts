@@ -11,10 +11,10 @@ export const INITIAL_ZOOM = 10;
   export function useNaverMaps() {
   const mapRef = useRef<naver.maps.Map | null>(null);
   const infoRaf = useRef<naver.maps.InfoWindow | null>(null);
-
+  
   const initMap = useCallback((mapId: string) => {
     if (!window.naver || mapRef.current) return;
-
+    
     const map = new window.naver.maps.Map(mapId, {
       center: new window.naver.maps.LatLng(
         INITIAL_CENTER[0],
@@ -29,11 +29,11 @@ export const INITIAL_ZOOM = 10;
         position: window.naver.maps.Position.RIGHT_TOP,
       },
     });
-
     mapRef.current = map;
+
   }, []);
 
-  return { initMap, mapRef };
+  return { initMap, mapRef, infoRaf };
 }
 
 

@@ -13,6 +13,7 @@ import Footer from "../components/Footer";
 import Map from "../components/Map";
 import Swiper from "swiper";
 import "swiper/css";
+import { useModalStore } from "../hooks/useModalStore";
 
 interface ShelterData {
   name: string;
@@ -25,19 +26,13 @@ export default function Shelter() {
   const swiperRef = useRef<Swiper | null>(null);
   const [activeTab, setActiveTab] = useState(0);
   const [open, setOpen] = useState(false);
-  const [modalData, setModalData] = useState<null | {
-    type: "shelter";
-    title: string;
-    address: string;
-    region: string;
-    phone: string;
-  }>(null);
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
   const pageLimit = 5;
-
+  const modalData = useModalStore((state) => state.modalData);
+  
   // 보호소 data가져오기
   const [shelterData, setShelterData] = useState<ShelterData[]>([]);
   useEffect(() => {
