@@ -10,7 +10,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import shelter from "../assets/json/shelter.json";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Map from "../components/Map";
+import Map from "../components/map/ShelterMap";
 import Swiper from "swiper";
 import "swiper/css";
 import { useModalStore } from "../hooks/useModalStore";
@@ -32,7 +32,7 @@ export default function Shelter() {
   const itemsPerPage = 3;
   const pageLimit = 5;
   const modalData = useModalStore((state) => state.modalData);
-  
+
   // 보호소 data가져오기
   const [shelterData, setShelterData] = useState<ShelterData[]>([]);
   useEffect(() => {
@@ -96,7 +96,7 @@ export default function Shelter() {
         <>
           <hr className="border-t border-gray-300 my-4" />
           <div className="flex justify-center items-center mb-4">
-            {modalData && (
+            {modalData && "phone" in modalData && (
               <>
                 <div
                   className="bg-white justify-center items-center rounded-2xl p-4 mt-10"
@@ -201,7 +201,7 @@ export default function Shelter() {
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <section className="relative min-h-screen">
-        <Map />
+        <Map/>
         {/* SideBar (Map 위에 포개짐) */}
         <div className="absolute top-0 left-0 min-h-screen z-10">
           <div className="w-[560px]">

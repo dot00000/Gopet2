@@ -59,11 +59,11 @@ const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
 
   return (
       <>
-      <h1 className="text-3xl p-8">보호소 입양</h1>
+      <h1 className="text-3xl p-5">보호소 입양</h1>
         <div className="embla">
           <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
-              {adoptData.map((data: any, index: any) => (
+              {adoptData.map((data: any, index: number) => (
                 <div className="embla__slide" key={index}>
                   <div className="embla__slide__number">
                     <div className='flex flex-col items-start rounded-2xl' 

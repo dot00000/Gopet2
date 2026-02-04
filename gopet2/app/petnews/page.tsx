@@ -5,6 +5,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import NewsItem from "../components/NewsItem";
 import axios from "axios";
+import Header from "../components/Header";
+import { useToggleNav } from "../hooks/useToggleNav";
 
 type Article = {
       title: string;
@@ -16,11 +18,14 @@ type Article = {
 export default function PetNews() {
   const [ articles, setArticles] = useState<Article[]>([]);
   const [ loading, setLoading ] = useState(true);
+  const { isNavOpen, toggleNav } = useToggleNav(false);
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const pageLimit = 5;
+
+  
 
 useEffect(() => {
   const fetchData = async () => {
@@ -69,6 +74,7 @@ useEffect(() => {
 
     return (
         <>
+            <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
             <section>
                 <h1 className="flex justify-center text-3xl p-10">🐾 반려동물 News</h1>
                 {currentItems.map(article => {

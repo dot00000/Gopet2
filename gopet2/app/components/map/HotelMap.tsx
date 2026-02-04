@@ -1,47 +1,43 @@
 "use client";
 import Script from "next/script";
-import { useNaverMaps } from "../hooks/useNaverMaps";
-import { useEffect, useState } from "react";
-import shelter from "../assets/json/shelter.json";
-import React from "react";
-import { useModalStore } from "../hooks/useModalStore";
+import { useNaverMaps } from "../../hooks/useNaverMaps";
+import { useEffect, useRef, useState } from "react";
+import { useModalStore } from "../../hooks/useModalStore";
+import KorPetTourApi from "@/app/api/KorPetTourApi";
 
-interface ShelterData {
-  name: string;
-  address: string;
-  phone: string;
-}
 
-export default function Map({ mapId = "map"}) {
+export default function HotelMap({ mapId = "map" }) {
   const { initMap, mapRef, infoRaf } = useNaverMaps();
 
-  useEffect (() => {
+  useEffect(() => {
     if (!window.naver) return;
     initMap(mapId);
   }, [mapId, initMap]);
 
   const [currentOpen, setCurrentOpen] = useState(false);
+  const [cacheApi, setCacheApi] = useState<any[] | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [shelterMarkers, setShelterMarkers] = useState<naver.maps.Marker[]>([]);
-
-  // 현재 위치 on/off
-  const [currentLocation, setCurrentLocation] = useState<naver.maps.Marker | null>(null);
-  const [shelterData, setShelterData] = useState<ShelterData[]>([]);
-  useEffect(() => {
-    const shelterData = shelter.map((data: any) => ({
-      name: data.name,
-      address: data.address,
-      phone: data.phone,
-    }));
-    setShelterData(shelterData);
-  }, []);
-
+  const hasSetIdleListener = useRef(false);
+  const [hotelMarkers, setHotelMarkers] = useState<naver.maps.Marker[]>([]);
   const modalData = useModalStore((state) => state.modalData);
   const setModalData = useModalStore((state) => state.setModalData);
 
+  // 현재 위치 on/off
+  const [currentLocation, setCurrentLocation] =
+    useState<naver.maps.Marker | null>(null);
+//   useEffect(() => {
+//     const shelterData = shelter.map((data: any) => ({
+//       name: data.name,
+//       address: data.address,
+//       phone: data.phone,
+//     }));
+//     shelterData;
+//   }, []);
+
   async function searchCoordinateToAddress(
     latlng: naver.maps.LatLng,
-    title?: string
+    title?: string,
   ): Promise<{ address: string; cityName: string }> {
     return new Promise((resolve, reject) => {
       naver.maps.Service.reverseGeocode(
@@ -85,56 +81,89 @@ export default function Map({ mapId = "map"}) {
           infoRaf.current?.open(mapRef.current!, latlng);
 
           resolve({ address, cityName });
-        }
+        },
       );
     });
   }
-  
-  // 보호소 마커 
-   const handleShelterLocation = () => {
-    if (!isOpen) {
-      const newMarkers = shelter.map((data) => {
-        const marker = new window.naver.maps.Marker({
-          position: new naver.maps.LatLng(Number(data.lat), Number(data.lng)),
-          map: mapRef.current!,
-          title: data.name,
-          icon: {
-            url: "/images/map/shelter_marker.png",
-            scaledSize: new naver.maps.Size(50, 50),
-            anchor: new naver.maps.Point(25, 25),
-          },
-        });
 
-        naver.maps.Event.addListener(marker, "click", () => {
-          const latlng = new naver.maps.LatLng(
-            Number(data.lat),
-            Number(data.lng)
-          );
-          searchCoordinateToAddress(latlng, data.name);
-          setModalData({
-            type: "shelter",
-            title: data.name,
-            region: data.region,
-            address: data.address,
-            phone: data.phone,
-          });
-        });
-
-        return marker;
-      });
-
-      setShelterMarkers(newMarkers);
-      setIsOpen(true);
-    } else {
-      shelterMarkers.forEach((marker) => marker.setMap(null));
-      setShelterMarkers([]);
-      setIsOpen(false);
-    }
+  type PlaceType = "hotel";
+  const markerIcons: Record<PlaceType, string> = {
+    hotel: "/images/map/hotel_marker.png",
   };
 
+  // 호텔 위치
+  const handleHotelLocation = async(type: PlaceType, keyword: string) => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (!hasSetIdleListener.current) {
+      window.naver.maps.Event.addListener(map, "idle", () => {
+        handleHotelLocation(type, keyword);
+      });
+      hasSetIdleListener.current = true;
+    }
+
+    const results = cacheApi ?? (await KorPetTourApi(keyword));
+    if (!cacheApi) {
+      setCacheApi(results);
+    }
+    const bounds = map.getBounds() as naver.maps.LatLngBounds;
+    const sw = bounds.getSW();
+    const ne = bounds.getNE();
+
+    const filtered = results.filter((item: any) => {
+      const lat = parseFloat(item.lat);
+      const lng = parseFloat(item.lng);
+      return (
+          !isNaN(lat) &&
+          !isNaN(lng) &&
+          lat >= sw.lat() &&
+          lat <= ne.lat() &&
+          lng >= sw.lng() &&
+          lng <= ne.lng()
+        );
+    });
+    const newMarkers: naver.maps.Marker[] = [];
+
+    // 마커생성
+    filtered.forEach((item: any) => {
+        const marker = new window.naver.maps.Marker({
+          position: new window.naver.maps.LatLng(item.lat, item.lng),
+          map,
+          title: item.title,
+          icon: {
+            url: markerIcons[type],
+            scaledSize: new window.naver.maps.Size(50, 50),
+            anchor: new window.naver.maps.Point(25, 25),
+          },
+        });
+         window.naver.maps.Event.addListener(marker, "click", async () => {
+          const latlng = new window.naver.maps.LatLng(item.lat, item.lng);
+          const { address, cityName } = await searchCoordinateToAddress(
+            latlng,
+            item.title
+          );
+          setModalData({
+            title: item.title,
+            address: address,
+            region: cityName,
+            phone: item.tel,
+            url: item.url,
+            charge: item.charge,
+            description: item.description,
+          });
+        });
+        
+        newMarkers.push(marker);
+        // 기존 마커를 새 마커가 렌더된 후 제거
+      });
+      if(type === "hotel"){
+        return setHotelMarkers(newMarkers);
+      }
+    }
+  // 마커 버튼 
 
   // 현재 위치 마커
-  const handleCurrentLocation = () => {
+  const handleCurrentLocation = async(type: PlaceType, keyword: string) => {
     if (!currentOpen) {
       if (!mapRef.current) return;
 
@@ -142,7 +171,7 @@ export default function Map({ mapId = "map"}) {
         navigator.geolocation.getCurrentPosition((position) => {
           const currentLocation = new naver.maps.LatLng(
             position.coords.latitude,
-            position.coords.longitude
+            position.coords.longitude,
           );
 
           const marker = new naver.maps.Marker({
@@ -165,9 +194,8 @@ export default function Map({ mapId = "map"}) {
       }
       setCurrentOpen(false);
     }
-
-    
   };
+  
   return (
     <>
       <div id={mapId} className="w-full h-[1000px]">
@@ -179,10 +207,9 @@ export default function Map({ mapId = "map"}) {
 
         {modalData && <div className="modal">{modalData.title}</div>}
 
-
         <button
           className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${
-            currentOpen ? "bg-blue-500 text-white" : "bg-white/60 text-black"
+            currentOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"
           }`}
           onClick={handleCurrentLocation}
           style={{ position: "absolute", top: 10, left: "50%", zIndex: 999 }}
@@ -192,7 +219,7 @@ export default function Map({ mapId = "map"}) {
 
         <button
           className={`flex justify-center items-center px-4 py-2 rounded-2xl transition
-            ${isOpen ? "bg-blue-500 text-white" : "bg-white/60 text-black"}`}
+            ${isOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"}`}
           onClick={handleShelterLocation}
           style={{ position: "absolute", top: 10, left: "60%", zIndex: 999 }}
         >
