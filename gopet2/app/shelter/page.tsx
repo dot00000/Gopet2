@@ -7,13 +7,13 @@ import { AiOutlineEnvironment } from "react-icons/ai";
 import { GiRotaryPhone } from "react-icons/gi";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import { useModalStore } from "../hooks/useModalStore";
 import shelter from "../assets/json/shelter.json";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Map from "../components/map/ShelterMap";
 import Swiper from "swiper";
+import ShelterMap from "../components/map/ShelterMap";
 import "swiper/css";
-import { useModalStore } from "../hooks/useModalStore";
 
 interface ShelterData {
   name: string;
@@ -201,7 +201,7 @@ export default function Shelter() {
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <section className="relative min-h-screen">
-        <Map/>
+        <ShelterMap/>
         {/* SideBar (Map 위에 포개짐) */}
         <div className="absolute top-0 left-0 min-h-screen z-10">
           <div className="w-[560px]">

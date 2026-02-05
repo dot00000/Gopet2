@@ -16,21 +16,19 @@ export default function ShelterMap({ mapId = "map" }) {
   const [currentOpen, setCurrentOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [shelterMarkers, setShelterMarkers] = useState<naver.maps.Marker[]>([]);
-
+  const [currentLocation, setCurrentLocation] = useState<naver.maps.Marker | null>(null);
+  
   const modalData = useModalStore((state) => state.modalData);
   const setModalData = useModalStore((state) => state.setModalData);
 
-  // 현재 위치 on/off
-  const [currentLocation, setCurrentLocation] =
-    useState<naver.maps.Marker | null>(null);
-  useEffect(() => {
-    const shelterData = shelter.map((data: any) => ({
-      name: data.name,
-      address: data.address,
-      phone: data.phone,
-    }));
-    shelterData;
-  }, []);
+    useEffect(() => {
+      const shelterData = shelter.map((data: any) => ({
+        name: data.name,
+        address: data.address,
+        phone: data.phone,
+      }));
+      shelterData;
+    }, []);
 
   async function searchCoordinateToAddress(
     latlng: naver.maps.LatLng,

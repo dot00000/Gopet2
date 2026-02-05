@@ -196,4 +196,7 @@ export function selectRegion() {
     ],
     제주특별자치도: ["제주시", "서귀포시"],
   };
+
+  return { regionData }
 }
+
