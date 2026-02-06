@@ -6,7 +6,7 @@ import { useModalStore } from "../../hooks/useModalStore";
 import KorPetTourApi from "@/app/api/KorPetTourApi";
 
 
-export default function HotelMap({ mapId = "map" }) {
+export default function HotelMap({ mapId = "map", hotels }: { mapId?: string; hotels: any[] }) {
   const { initMap, mapRef, infoRaf } = useNaverMaps();
 
   useEffect(() => {
@@ -17,23 +17,22 @@ export default function HotelMap({ mapId = "map" }) {
   const [currentOpen, setCurrentOpen] = useState(false);
   const [cacheApi, setCacheApi] = useState<any[] | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [shelterMarkers, setShelterMarkers] = useState<naver.maps.Marker[]>([]);
-  const hasSetIdleListener = useRef(false);
   const [hotelMarkers, setHotelMarkers] = useState<naver.maps.Marker[]>([]);
+  const hasSetIdleListener = useRef(false);  
   const modalData = useModalStore((state) => state.modalData);
   const setModalData = useModalStore((state) => state.setModalData);
 
   // 현재 위치 on/off
   const [currentLocation, setCurrentLocation] =
     useState<naver.maps.Marker | null>(null);
-//   useEffect(() => {
-//     const shelterData = shelter.map((data: any) => ({
-//       name: data.name,
-//       address: data.address,
-//       phone: data.phone,
-//     }));
-//     shelterData;
-//   }, []);
+  useEffect(() => {
+    const hotelData = hotels.map((data: any) => ({
+      name: data.name,
+      address: data.address,
+      phone: data.phone,
+    }));
+    hotelData;
+  }, []);
 
   async function searchCoordinateToAddress(
     latlng: naver.maps.LatLng,
@@ -92,12 +91,12 @@ export default function HotelMap({ mapId = "map" }) {
   };
 
   // 호텔 위치
-  const handleHotelLocation = async(type: PlaceType, keyword: string) => {
+  const showMarkers = async(type: PlaceType, keyword: string) => {
     const map = mapRef.current;
     if (!map) return;
     if (!hasSetIdleListener.current) {
       window.naver.maps.Event.addListener(map, "idle", () => {
-        handleHotelLocation(type, keyword);
+        showMarkers(type, keyword);
       });
       hasSetIdleListener.current = true;
     }
@@ -142,15 +141,7 @@ export default function HotelMap({ mapId = "map" }) {
             latlng,
             item.title
           );
-          setModalData({
-            title: item.title,
-            address: address,
-            region: cityName,
-            phone: item.tel,
-            url: item.url,
-            charge: item.charge,
-            description: item.description,
-          });
+          setModalData;
         });
         
         newMarkers.push(marker);
@@ -161,9 +152,9 @@ export default function HotelMap({ mapId = "map" }) {
       }
     }
   // 마커 버튼 
-
-  // 현재 위치 마커
-  const handleCurrentLocation = async(type: PlaceType, keyword: string) => {
+  const handleHotelLocation = () => showMarkers("hotel", "펜션");
+    // 현재 위치 마커
+  const handleCurrentLocation = () => {
     if (!currentOpen) {
       if (!mapRef.current) return;
 
@@ -215,16 +206,16 @@ export default function HotelMap({ mapId = "map" }) {
           style={{ position: "absolute", top: 10, left: "50%", zIndex: 999 }}
         >
           {currentOpen ? "현재위치" : "현재위치"}
-        </button>
-
+        </button> 
         <button
-          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition
-            ${isOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"}`}
-          onClick={handleShelterLocation}
+          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${
+            isOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"
+          }`}
+          onClick={handleHotelLocation}
           style={{ position: "absolute", top: 10, left: "60%", zIndex: 999 }}
         >
-          {isOpen ? "보호소" : "보호소"}
-        </button>
+          {isOpen ? "숙소" : "숙소"}
+        </button> 
       </div>
     </>
   );

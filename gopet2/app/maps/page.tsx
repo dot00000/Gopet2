@@ -178,7 +178,7 @@ export default function Maps() {
                     <span className="text-2xl">
                       <GiRotaryPhone />
                     </span>
-                    <span className="ml-2">{modalData.phone}</span>
+                    {/* <span className="ml-2">{modalData.}</span> */}
                   </div>
                 </div>
               </>

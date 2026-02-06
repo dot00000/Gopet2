@@ -7,23 +7,15 @@ import { AiOutlineEnvironment } from "react-icons/ai";
 import { GiRotaryPhone } from "react-icons/gi";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
-import KorPetTourApi from "../api/KorPetTourApi";
+import { useModalStore } from "../hooks/useModalStore";
+import { HotelData } from "../hooks/useModalStore";
+import HotelMap from "../components/map/HotelMap";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Map from "../components/map/ShelterMap";
-import Swiper from "swiper";
+import Swiper from "swiper";;
 import "swiper/css";
-import { useModalStore } from "../hooks/useModalStore";
 
-interface HotelDataType {
-  address: string;
-  image: string;
-  title: string;
-  zipcode: string;
-  thumbnail: string;
-}
-
-export default function Shelter() {
+export default function Hotel() {
   const { isNavOpen, toggleNav } = useToggleNav(false);
   const swiperRef = useRef<Swiper | null>(null);
   const [activeTab, setActiveTab] = useState(0);
@@ -35,30 +27,28 @@ export default function Shelter() {
   const pageLimit = 5;
   const modalData = useModalStore((state) => state.modalData);
 
+  // 보호소 data가져오기
+  const [hotelData, setHotelData] = useState<HotelData[]>([]);
   useEffect(() => {
-    KorPetTourApi("category");
-  }, []);
-
-  const [hotelData, setHotelData] = useState<HotelDataType[]>([]);
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchHotels = async () => {
       try {
-        const results = await KorPetTourApi();
-        const hotelData = results.map((data: any) => {
-          return {
-            address: data.address,
-            image: data.image,
-            title: data.title,
-            zipcode: data.zipcode,
-            thumbnail: data.thumbnail,
-          };
-        });
-        setHotelData(hotelData);
-      } catch (error) {
-        console.log(error);
+        const res = await fetch("/api/kcisa");
+        const json = await res.json();
+        const hotels: HotelData[] = (json.data || [])
+          .filter((item: any) => item.category2 === "펜션")
+          .map((item: any) => ({
+            title: item.title,
+            address: item.address,
+            description: item.description,
+            tel: item.tel,
+            url: item.url,
+          }));
+        setHotelData(hotels);
+      } catch (err) {
+        console.log(err);
       }
     };
-    fetchData();
+    fetchHotels();
   }, []);
 
   // swiper
@@ -113,7 +103,7 @@ export default function Shelter() {
         <>
           <hr className="border-t border-gray-300 my-4" />
           <div className="flex justify-center items-center mb-4">
-            {modalData && (
+            {modalData && "phone" in modalData && (
               <>
                 <div
                   className="bg-white justify-center items-center rounded-2xl p-4 mt-10"
@@ -133,7 +123,7 @@ export default function Shelter() {
                     <span className="text-2xl">
                       <GiRotaryPhone />
                     </span>
-                    <span className="ml-2"></span>
+                    <span className="ml-2">{modalData.phone}</span>
                   </div>
                 </div>
               </>
@@ -157,7 +147,7 @@ export default function Shelter() {
                   style={{ width: "400px", height: "180px" }}
                 >
                   <p className="flex justify-center items-center text-lg font-bold m-3">
-                    {data.name}
+                    {data.title}
                   </p>
                   <hr className="border-t border-gray-300 my-4" />
                   <div className="flex">
@@ -168,7 +158,15 @@ export default function Shelter() {
                   </div>
                   <div className="flex">
                     <span className="ml-2 mb-2 text-base">
-                      Tel : {data.phone}
+                      {data.description}
+                    </span>
+                    <span className="ml-2 mb-2 text-base">
+                      Url : {data.url}
+                    </span>
+                  </div>
+                  <div className="flex">
+                    <span className="ml-2 mb-2 text-base">
+                      Tel : {data.tel}
                     </span>
                   </div>
                 </div>
@@ -218,7 +216,7 @@ export default function Shelter() {
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <section className="relative min-h-screen">
-        <Map />
+        <HotelMap hotels={hotelData} />
         {/* SideBar (Map 위에 포개짐) */}
         <div className="absolute top-0 left-0 min-h-screen z-10">
           <div className="w-[560px]">
