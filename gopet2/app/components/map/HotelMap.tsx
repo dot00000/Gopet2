@@ -11,7 +11,7 @@ export default function HotelMap({
   mapId?: string;
   hotels: HotelData[];
 }) {
-  const { initMap, mapRef, infoRaf } = useNaverMaps();
+  const { initMap, mapRef } = useNaverMaps();
 
   useEffect(() => {
     if (!window.naver) return;
@@ -25,10 +25,9 @@ export default function HotelMap({
   const modalData = useModalStore((state) => state.modalData);
   const setModalData = useModalStore((state) => state.setModalData);
 
-  // 호텔 마커 On/off
+  // 호텔 마커
   const [hotelMarkers, setHotelMarkers] = useState<naver.maps.Marker[]>([]);
-  const [hotelDataState, setHotelDataState] = useState<HotelData[]>([]);
-  // 현재 위치 on/off
+  // 현재 위치
   const [currentLocation, setCurrentLocation] =
     useState<naver.maps.Marker | null>(null);
   // 선택된 위치 저장
@@ -49,130 +48,9 @@ export default function HotelMap({
       description: data.description || "",
       charge: data.charge || "",
     }));
-    setHotelDataState(mapHotels);
+    mapHotels;
   }, [hotels]);
-
-  // type PlaceType = "hotel";
-  // const markerIcons: Record<PlaceType, string> = {
-  //   hotel: "/images/map/hotel_marker.png",
-  // };
-  async function searchCoordinateToAddress(
-    latlng: naver.maps.LatLng,
-    title?: string,
-  ): Promise<{ address: string; cityName: string }> {
-    return new Promise((resolve, reject) => {
-      naver.maps.Service.reverseGeocode(
-        {
-          coords: latlng,
-          orders: [
-            naver.maps.Service.OrderType.ADDR,
-            naver.maps.Service.OrderType.ROAD_ADDR,
-          ].join(","),
-        },
-        function (status, response) {
-          if (status === naver.maps.Service.Status.ERROR) {
-            reject("주소 조회 실패");
-            return;
-          }
-          const items = response?.v2?.results || [];
-          if (items.length === 0) {
-            resolve({ address: "주소 없음", cityName: "도시 정보 없음" });
-            return;
-          }
-          const item = items[0];
-          const cityName = item.region.area1.name;
-          const address =
-            item.region.area1.name +
-            " " +
-            item.region.area2.name +
-            " " +
-            item.region.area3.name +
-            " " +
-            item.region.area4.name +
-            (item.land.number1 ? " " + item.land.number1 : "") +
-            (item.land.number2 ? "-" + item.land.number2 : "") +
-            (item.land.addition0?.value ? " " + item.land.addition0.value : "");
-          const contentHtml = `
-            <div style="position:relative;padding:10px;min-width:150px;min-height:80px;line-height:140%;font-size:12px;">
-              <h1>${title || "정보없음"}</h1>
-              <p>주소 : ${address}</p>
-            </div>
-          `;
-          infoRaf.current?.setContent(contentHtml);
-          infoRaf.current?.open(mapRef.current!, latlng);
-
-          resolve({ address, cityName });
-        },
-      );
-    });
-  }
-
-  // 마커 생성
-  // const renderHotelMarkers = () => {
-
-  //   const map = mapRef.current;
-  //   if (!map) return;
-
-  //   const bounds = map.getBounds() as naver.maps.LatLngBounds;
-  //   if (!bounds) return;
-
-  //   const sw = bounds.getSW();
-  //   const ne = bounds.getNE();
-
-  //   // 기존 마커 제거
-  //   hotelMarkers.forEach(marker => marker.setMap(null));
-
-  //   // bounds 안에 있는 호텔만 필터
-  //   const filteredHotels = hotels.filter((data) => {
-  //     return (
-  //       data.lat >= sw.lat() &&
-  //       data.lat <= ne.lat() &&
-  //       data.lng >= sw.lng() &&
-  //       data.lng <= ne.lng()
-  //     )
-  //   })
-  //   // 필터링 된 데이터 값만 마커 생성
-  //   const newMarkers = filteredHotels.map((data) => {
-  //     const marker = new naver.maps.Marker({
-  //       position: new naver.maps.LatLng(data.lat, data.lng),
-  //       map,
-  //       title: data.title,
-  //       icon: {
-  //         url: "/images/map/hotel_marker.png",
-  //         scaledSize: new naver.maps.Size(50, 50),
-  //         anchor: new naver.maps.Point(25, 25),
-  //       },
-  //     });
-  //     naver.maps.Event.addListener(marker, "click", () => {
-  //       setModalData(data);
-  //     });
-  //     return marker;
-  //   });
-  //   setHotelMarkers(newMarkers);
-  // }
-  // 숙소 마커
-  //   const handleHotelLocation = () => {
-  //     const map = mapRef.current;
-  //     if(!map) return;
-  //     if(!hasSetIdleListener.current) {
-  //       naver.maps.Event.addListener(map, "idle", () => {
-  //         if (isOpen){
-  //           renderHotelMarkers();
-  //         }
-  //       });
-  //       hasSetIdleListener.current=true;
-  //     }
-
-  //     if (!isOpen) {
-  //       renderHotelMarkers();
-  //       setIsOpen(true);
-  //     } else {
-  //     // 꺼질 때 모든 호텔 마커 제거
-  //     hotelMarkers.forEach((marker) => marker.setMap(null));
-  //     setHotelMarkers([]);
-  //     setIsOpen(false);
-  //   }
-  // };
+  
   const renderHotelMarkers = () => {
     const map = mapRef.current;
     if (!map || hotels.length === 0) return;

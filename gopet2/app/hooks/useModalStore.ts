@@ -4,7 +4,7 @@ export interface ShelterData {
   type: "shelter";
   title: string;
   address: string;
-  tel: string;
+  phone: string;
   description: string;
   charge: string;
   lat: number;

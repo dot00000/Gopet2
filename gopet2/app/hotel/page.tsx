@@ -3,7 +3,8 @@
 import "swiper/css";
 import { useEffect, useRef, useState } from "react";
 import { useToggleNav } from "../hooks/useToggleNav";
-import { AiOutlineEnvironment } from "react-icons/ai";
+import { AiOutlineEnvironment, AiOutlineInfoCircle } from "react-icons/ai";
+import { CgWebsite } from "react-icons/cg";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { useModalStore } from "../hooks/useModalStore";
@@ -13,6 +14,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swiper from "swiper";;
 import "swiper/css";
+import { LuPhone } from "react-icons/lu";
 
 export default function Hotel() {
   const { isNavOpen, toggleNav } = useToggleNav(false);
@@ -105,34 +107,39 @@ export default function Hotel() {
         <>
           <hr className="border-t border-gray-300 my-4" />
           <div className="flex justify-center items-center mb-4">
-            {modalData && (
+            {modalData && 'tel' in modalData && (
               <>
                 <div
                   className="bg-white justify-center items-center rounded-2xl p-4 mt-10"
-                  style={{ width: "400px", height: "180px" }}
+                  style={{ width: "400px", minHeight: "200px" }}
                 >
                   <p className="flex justify-center items-center text-xl font-bold m-2">
                     {modalData.title}
                   </p>
                   <hr className="border-t border-gray-300 my-4" />
                   <div className="flex">
-                    <span className="text-xl">
+                    <span className="text-2xl">
                       <AiOutlineEnvironment />
                     </span>
                     <span className="ml-2 mb-2 text-base">{modalData.address}</span>
                   </div>
                   <div className="flex">
-                    <span className="ml-2 mb-2 text-base">
-                      {modalData.description}
+                    <span className="text-2xl">
+                      <AiOutlineInfoCircle />
                     </span>
-                    <span className="ml-2 mb-2 text-base">
-                      Url : {modalData.url}
-                    </span>
+                    <span className="ml-2 mb-2 text-base">{modalData.description}</span>
                   </div>
-                  <div className="flex">
-                    <span className="ml-2 mb-2 text-base">
-                      Tel : {modalData.tel}
-                    </span>
+                  <div className="flex">  
+                      <span className="text-2xl">
+                        <CgWebsite />
+                      </span>
+                      <span className="ml-2 mb-2 text-base">{modalData.url}</span>
+                  </div>
+                    <div className="flex">  
+                      <span className="text-2xl">
+                        <LuPhone />
+                      </span>
+                      <span className="ml-2 mb-2 text-base">{modalData.tel}</span>
                   </div>
                 </div>
               </>
@@ -152,31 +159,36 @@ export default function Hotel() {
               {currentItems.map((data: any, index: any) => (
                 <div
                   key={index}
-                  className="bg-white justify-center items-center rounded-2xl p-4 mt-5 mb-5"
-                  style={{ width: "400px", height: "180px" }}
+                  className="bg-white justify-center items-center rounded-2xl p-4 mt-10"
+                  style={{ width: "400px", minHeight: "200px" }}
                 >
-                  <p className="flex justify-center items-center text-lg font-bold m-3">
+                    <p className="flex justify-center items-center text-xl font-bold m-2">
                     {data.title}
                   </p>
                   <hr className="border-t border-gray-300 my-4" />
                   <div className="flex">
-                    <span className="text-xl">
+                    <span className="text-2xl">
                       <AiOutlineEnvironment />
                     </span>
                     <span className="ml-2 mb-2 text-base">{data.address}</span>
                   </div>
                   <div className="flex">
-                    <span className="ml-2 mb-2 text-base">
-                      {data.description}
+                    <span className="text-2xl">
+                      <AiOutlineInfoCircle />
                     </span>
-                    <span className="ml-2 mb-2 text-base">
-                      Url : {data.url}
-                    </span>
+                    <span className="ml-2 mb-2 text-base">{data.description}</span>
                   </div>
-                  <div className="flex">
-                    <span className="ml-2 mb-2 text-base">
-                      Tel : {data.tel}
-                    </span>
+                  <div className="flex">  
+                      <span className="text-2xl">
+                        <CgWebsite />
+                      </span>
+                      <span className="ml-2 mb-2 text-base">{data.url}</span>
+                  </div>
+                  <div className="flex">  
+                      <span className="text-2xl">
+                        <LuPhone />
+                      </span>
+                      <span className="ml-2 mb-2 text-base">{data.tel}</span>
                   </div>
                 </div>
               ))}

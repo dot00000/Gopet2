@@ -4,9 +4,9 @@ import "swiper/css";
 import { useEffect, useRef, useState } from "react";
 import { useToggleNav } from "../hooks/useToggleNav";
 import { AiOutlineEnvironment } from "react-icons/ai";
-import { GiRotaryPhone } from "react-icons/gi";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import { LuPhone } from "react-icons/lu";
 import { useModalStore } from "../hooks/useModalStore";
 import shelter from "../assets/json/shelter.json";
 import Header from "../components/Header";
@@ -96,11 +96,11 @@ export default function Shelter() {
         <>
           <hr className="border-t border-gray-300 my-4" />
           <div className="flex justify-center items-center mb-4">
-            {modalData && (
+            {modalData && 'phone' in modalData &&(
               <>
                 <div
                   className="bg-white justify-center items-center rounded-2xl p-4 mt-10"
-                  style={{ width: "400px", height: "180px" }}
+                  style={{ width: "400px", minHeight: "200px" }}
                 >
                   <p className="flex justify-center items-center text-xl font-bold m-2">
                     {modalData.title}
@@ -110,13 +110,13 @@ export default function Shelter() {
                     <span className="text-2xl">
                       <AiOutlineEnvironment />
                     </span>
-                    <span className="ml-2">{modalData.address}</span>
+                    <span className="ml-2 mb-2 text-base">{modalData.address}</span>
                   </div>
-                  <div className="flex items-center">
+                  <div className="flex">
                     <span className="text-2xl">
-                      <GiRotaryPhone />
+                      <LuPhone />
                     </span>
-                    <span className="ml-2">{modalData.tel}</span>
+                    <span className="ml-2 mb-2 text-base">{modalData.phone}</span>
                   </div>
                 </div>
               </>
@@ -132,16 +132,14 @@ export default function Shelter() {
         <>
           <hr className="border-t border-gray-300 my-4" />
           <div className="flex justify-center items-center mb-5">
-            <div
-              className="flex flex-col items-center mb-4 no-scrollbar"
-            >
+            <div className="flex flex-col items-center mb-4 no-scrollbar">
               {currentItems.map((data: any, index: any) => (
                 <div
                   key={index}
                   className="bg-white justify-center items-center rounded-2xl p-4 mt-5 mb-5"
-                  style={{ width: "400px", height: "180px" }}
+                  style={{ width: "400px", minHeight: "200px" }}
                 >
-                  <p className="flex justify-center items-center text-lg font-bold m-3">
+                  <p className="flex justify-center items-center text-xl font-bold m-3">
                     {data.name}
                   </p>
                   <hr className="border-t border-gray-300 my-4" />
@@ -151,46 +149,49 @@ export default function Shelter() {
                     </span>
                     <span className="ml-2 mb-2 text-base">{data.address}</span>
                   </div>
-                  <div className="flex">
-                    <span className="ml-2 mb-2 text-base">Tel : {data.phone}</span>
+                  <div className="flex">  
+                      <span className="text-2xl">
+                        <LuPhone />
+                      </span>
+                      <span className="ml-2 mb-2 text-base">{data.phone}</span>
                   </div>
                 </div>
               ))}
 
-            {/* pagination */}
-            <section className="flex justify-center items-center space-x-2 my-15">
-              <button
-                onClick={() => setCurrentPage(startPage - 1)}
-                disabled={startPage === 1}
-                className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
-              >
-                <IoIosArrowBack />
-              </button>
-              {pageNumbers.map((number) => (
+              {/* pagination */}
+              <section className="flex justify-center items-center space-x-2 my-15">
                 <button
-                  key={number}
-                  onClick={() => {
-                    setCurrentPage(number);
-                    window.scrollTo(0, 0); // 페이지 이동 시 상단으로
-                  }}
-                  className={`px-4 py-2 rounded-lg font-bold text-base transition-all ${
-                    currentPage === number
-                      ? "bg-blue-800 text-white scale-110"
-                      : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-100"
-                  }`}
+                  onClick={() => setCurrentPage(startPage - 1)}
+                  disabled={startPage === 1}
+                  className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
                 >
-                  {number}
+                  <IoIosArrowBack />
                 </button>
-              ))}
+                {pageNumbers.map((number) => (
+                  <button
+                    key={number}
+                    onClick={() => {
+                      setCurrentPage(number);
+                      window.scrollTo(0, 0); // 페이지 이동 시 상단으로
+                    }}
+                    className={`px-4 py-2 rounded-lg font-bold text-base transition-all ${
+                      currentPage === number
+                        ? "bg-blue-800 text-white scale-110"
+                        : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    {number}
+                  </button>
+                ))}
 
-              <button
-                onClick={() => setCurrentPage(endPage + 1)}
-                disabled={endPage === totalPages}
-                className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
-              >
-                <IoIosArrowForward />
-              </button>
-            </section>
+                <button
+                  onClick={() => setCurrentPage(endPage + 1)}
+                  disabled={endPage === totalPages}
+                  className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
+                >
+                  <IoIosArrowForward />
+                </button>
+              </section>
             </div>
           </div>
         </>
@@ -201,7 +202,7 @@ export default function Shelter() {
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <section className="relative min-h-screen">
-        <ShelterMap/>
+        <ShelterMap />
         {/* SideBar (Map 위에 포개짐) */}
         <div className="absolute top-0 left-0 min-h-screen z-10">
           <div className="w-[560px]">
@@ -244,9 +245,8 @@ export default function Shelter() {
             </div>
           </div>
         </div>
-        <Footer/>
+        <Footer />
       </section>
-      
     </>
   );
 }
