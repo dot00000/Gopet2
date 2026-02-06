@@ -7,7 +7,7 @@ const NavBar: React.FC = () => {
       <Link href="/hotel" className="w-1/6 min-w-[100px]">
         <div className={styles.nav_box}>
           <Image src="/images/navmenu/hotel.png" alt="숙박 아이콘" width={110} height={20} className="border-10"/>
-          <h2 className={styles.nav_font}>숙 박</h2>
+          <h2 className={styles.nav_font}>숙 소</h2>
         </div>
       </Link>
       <Link href="/maps" className="w-1/6 min-w-[100px]">

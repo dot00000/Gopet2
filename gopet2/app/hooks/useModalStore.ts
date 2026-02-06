@@ -4,8 +4,12 @@ export interface ShelterData {
   type: "shelter";
   title: string;
   address: string;
-  region: string;
-  phone: string;
+  tel: string;
+  description: string;
+  charge: string;
+  lat: number;
+  lng: number;
+  url: string;
 }
 
 export interface HospitalData {
@@ -15,6 +19,8 @@ export interface HospitalData {
   tel: string;
   description: string;
   charge: string;
+  lat: number;
+  lng: number;
   url: string;
 }
 
@@ -25,6 +31,8 @@ export interface ParkData {
   tel: string;
   description: string;
   charge: string;
+  lat: number;
+  lng: number;
   url: string;
 }
 
@@ -35,6 +43,8 @@ export interface FoodData {
   tel: string;
   description: string;
   charge: string;
+  lat: number;
+  lng: number;
   url: string;
 }
 
@@ -45,6 +55,8 @@ export interface CafeData {
   tel: string;
   description: string;
   charge: string;
+  lat: number;
+  lng: number;
   url: string;
 }
 
@@ -55,8 +67,11 @@ export interface HotelData {
   tel: string;
   description: string;
   charge: string;
+  lat: number;
+  lng: number;
   url: string;
 }
+
 
 interface ModalState {
   modalData: ShelterData | HospitalData | ParkData | FoodData | CafeData | HotelData | null;

@@ -4,7 +4,6 @@ import "swiper/css";
 import { useEffect, useRef, useState } from "react";
 import { useToggleNav } from "../hooks/useToggleNav";
 import { AiOutlineEnvironment } from "react-icons/ai";
-import { GiRotaryPhone } from "react-icons/gi";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { useModalStore } from "../hooks/useModalStore";
@@ -26,9 +25,8 @@ export default function Hotel() {
   const itemsPerPage = 3;
   const pageLimit = 5;
   const modalData = useModalStore((state) => state.modalData);
-
-  // 보호소 data가져오기
   const [hotelData, setHotelData] = useState<HotelData[]>([]);
+  // 호텔 data가져오기
   useEffect(() => {
     const fetchHotels = async () => {
       try {
@@ -37,9 +35,13 @@ export default function Hotel() {
         const hotels: HotelData[] = (json.data || [])
           .filter((item: any) => item.category2 === "펜션")
           .map((item: any) => ({
+            type: "hotel",
             title: item.title,
             address: item.address,
-            description: item.description,
+            description: item.description ?? "",
+            charge: item.charge ?? "",
+            lat: Number(item.lat),
+            lng: Number(item.lng),
             tel: item.tel,
             url: item.url,
           }));
@@ -103,7 +105,7 @@ export default function Hotel() {
         <>
           <hr className="border-t border-gray-300 my-4" />
           <div className="flex justify-center items-center mb-4">
-            {modalData && "phone" in modalData && (
+            {modalData && (
               <>
                 <div
                   className="bg-white justify-center items-center rounded-2xl p-4 mt-10"
@@ -114,23 +116,30 @@ export default function Hotel() {
                   </p>
                   <hr className="border-t border-gray-300 my-4" />
                   <div className="flex">
-                    <span className="text-2xl">
+                    <span className="text-xl">
                       <AiOutlineEnvironment />
                     </span>
-                    <span className="ml-2">{modalData.address}</span>
+                    <span className="ml-2 mb-2 text-base">{modalData.address}</span>
                   </div>
-                  <div className="flex items-center">
-                    <span className="text-2xl">
-                      <GiRotaryPhone />
+                  <div className="flex">
+                    <span className="ml-2 mb-2 text-base">
+                      {modalData.description}
                     </span>
-                    <span className="ml-2">{modalData.phone}</span>
+                    <span className="ml-2 mb-2 text-base">
+                      Url : {modalData.url}
+                    </span>
+                  </div>
+                  <div className="flex">
+                    <span className="ml-2 mb-2 text-base">
+                      Tel : {modalData.tel}
+                    </span>
                   </div>
                 </div>
               </>
             )}
           </div>
         </>
-      ),
+      )
     },
     {
       id: 1,

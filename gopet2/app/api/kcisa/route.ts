@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import KcisaApi from "../KcisaApi";
 
-const Kcisa = async (categoryFilter: any) => {
+export const Kcisa = async (categoryFilter: any) => {
   const apiKey = `https://api.kcisa.kr/openapi/API_TOU_050/request?serviceKey=${process.env.KCISA_API_KEY}&type=json`;
   try {
 
@@ -74,7 +74,7 @@ const Kcisa = async (categoryFilter: any) => {
     return [];
   }
 };
-export default Kcisa;
+
 
 let cache: any[] = [];
 let lastUpdated = 0;
@@ -87,8 +87,6 @@ export async function GET() {
     // JSON 파일로 저장
     const filePath = path.join(process.cwd(), "public", "kcisa.json");
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
-
-    console.log("kcisa.json 내용 샘플:", data.slice(0, 5));
 
     return new Response(
       JSON.stringify({ success: true, count: data.length, data }),

@@ -96,7 +96,7 @@ export default function Shelter() {
         <>
           <hr className="border-t border-gray-300 my-4" />
           <div className="flex justify-center items-center mb-4">
-            {modalData && "phone" in modalData && (
+            {modalData && (
               <>
                 <div
                   className="bg-white justify-center items-center rounded-2xl p-4 mt-10"
@@ -116,7 +116,7 @@ export default function Shelter() {
                     <span className="text-2xl">
                       <GiRotaryPhone />
                     </span>
-                    <span className="ml-2">{modalData.phone}</span>
+                    <span className="ml-2">{modalData.tel}</span>
                   </div>
                 </div>
               </>
