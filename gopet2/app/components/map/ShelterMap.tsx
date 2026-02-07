@@ -1,12 +1,13 @@
 "use client";
 import Script from "next/script";
+import { IoRefresh } from "react-icons/io5";
 import { useNaverMaps } from "../../hooks/useNaverMaps";
 import { useEffect, useState } from "react";
-import shelter from "../../assets/json/shelter.json";
 import { useModalStore } from "../../hooks/useModalStore";
+import shelter from "../../assets/json/shelter.json";
 
 export default function ShelterMap({ mapId = "map" }) {
-  const { initMap, mapRef, infoRaf } = useNaverMaps();
+  const { initMap, mapRef } = useNaverMaps();
 
   useEffect(() => {
     if (!window.naver) return;
@@ -14,113 +15,104 @@ export default function ShelterMap({ mapId = "map" }) {
   }, [mapId, initMap]);
 
   const [currentOpen, setCurrentOpen] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [shelterMarkers, setShelterMarkers] = useState<naver.maps.Marker[]>([]);
-  const [currentLocation, setCurrentLocation] = useState<naver.maps.Marker | null>(null);
-  
+  const [currentLocation, setCurrentLocation] =
+    useState<naver.maps.Marker | null>(null);
+
   const modalData = useModalStore((state) => state.modalData);
   const setModalData = useModalStore((state) => state.setModalData);
 
-    useEffect(() => {
-      const shelterData = shelter.map((data: any) => ({
-        name: data.name,
-        address: data.address,
-        phone: data.phone,
-      }));
-      shelterData;
-    }, []);
-
-  async function searchCoordinateToAddress(
-    latlng: naver.maps.LatLng,
-    title?: string,
-  ): Promise<{ address: string; cityName: string }> {
-    return new Promise((resolve, reject) => {
-      naver.maps.Service.reverseGeocode(
-        {
-          coords: latlng,
-          orders: [
-            naver.maps.Service.OrderType.ADDR,
-            naver.maps.Service.OrderType.ROAD_ADDR,
-          ].join(","),
-        },
-        function (status, response) {
-          if (status === naver.maps.Service.Status.ERROR) {
-            reject("주소 조회 실패");
-            return;
-          }
-          const items = response?.v2?.results || [];
-          if (items.length === 0) {
-            resolve({ address: "주소 없음", cityName: "도시 정보 없음" });
-            return;
-          }
-          const item = items[0];
-          const cityName = item.region.area1.name;
-          const address =
-            item.region.area1.name +
-            " " +
-            item.region.area2.name +
-            " " +
-            item.region.area3.name +
-            " " +
-            item.region.area4.name +
-            (item.land.number1 ? " " + item.land.number1 : "") +
-            (item.land.number2 ? "-" + item.land.number2 : "") +
-            (item.land.addition0?.value ? " " + item.land.addition0.value : "");
-          const contentHtml = `
-            <div style="position:relative;padding:10px;min-width:150px;min-height:80px;line-height:140%;font-size:12px;">
-              <h1>${title || "정보없음"}</h1>
-              <p>주소 : ${address}</p>
-            </div>
-          `;
-          infoRaf.current?.setContent(contentHtml);
-          infoRaf.current?.open(mapRef.current!, latlng);
-
-          resolve({ address, cityName });
-        },
-      );
-    });
-  }
+  useEffect(() => {
+    const shelterData = shelter.map((data: any) => ({
+      name: data.name,
+      address: data.address,
+      phone: data.phone,
+    }));
+    shelterData;
+  }, []);
 
   // 보호소 마커
-  const handleShelterLocation = () => {
-    if (!isOpen) {
-      const newMarkers = shelter.map((data) => {
-        const marker = new window.naver.maps.Marker({
-          position: new naver.maps.LatLng(Number(data.lat), Number(data.lng)),
-          map: mapRef.current!,
-          title: data.name,
-          icon: {
-            url: "/images/map/shelter_marker.png",
-            scaledSize: new naver.maps.Size(50, 50),
-            anchor: new naver.maps.Point(25, 25),
-          },
-        });
+  const renderShelterMarkers = () => {
+    const map = mapRef.current;
+    if (!map || shelter.length === 0) return;
 
-        naver.maps.Event.addListener(marker, "click", () => {
-          const latlng = new naver.maps.LatLng(
-            Number(data.lat),
-            Number(data.lng),
-          );
-          searchCoordinateToAddress(latlng, data.name);
-          setModalData({
-            type: "shelter",
-            title: data.name,
-            region: data.region,
-            address: data.address,
-            phone: data.phone,
-          });
-        });
+    const bounds = map.getBounds() as naver.maps.LatLngBounds;
+    if (!bounds) return;
 
-        return marker;
+    const sw = bounds.getSW();
+    const ne = bounds.getNE();
+
+    // 기존 마커 제거
+    shelterMarkers.forEach((marker) => marker.setMap(null));
+
+    // bounds 안에 있는 호텔만 필터
+    const filteredCafe = shelter.filter(
+      (shelter) =>
+        shelter.lat >= sw.lat() &&
+        shelter.lat <= ne.lat() &&
+        shelter.lng >= sw.lng() &&
+        shelter.lng <= ne.lng(),
+    );
+
+    // 새 마커 생성
+    const newMarkers = filteredCafe.map((shelter) => {
+      const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(shelter.lat, shelter.lng),
+        map,
+        title: shelter.name,
+        icon: {
+          url: "/images/map/shelter_marker.png",
+          scaledSize: new naver.maps.Size(50, 50),
+          anchor: new naver.maps.Point(25, 25),
+        },
       });
 
-      setShelterMarkers(newMarkers);
+      naver.maps.Event.addListener(marker, "click", () => {
+        setModalData({
+          type: "shelter",
+          title: shelter.name,
+          address: shelter.address,
+          phone: shelter.phone,
+          description: shelter.category || "",
+          charge: "",
+          lat: shelter.lat,
+          lng: shelter.lng,
+          url: "",
+        });
+      });
+
+      return marker;
+    });
+
+    setShelterMarkers(newMarkers);
+  };
+  // 보호소 버튼
+  const handleShelterLocation = () => {
+    if (!mapRef.current) return;
+    if (!isOpen) {
+      renderShelterMarkers();
       setIsOpen(true);
     } else {
       shelterMarkers.forEach((marker) => marker.setMap(null));
       setShelterMarkers([]);
       setIsOpen(false);
     }
+  };
+
+  // 새로고침 버튼
+  const handleRefreshLocation = () => {
+    if (!isOpen) return;
+    setRefresh(true);
+
+    // 기존 마커 삭제
+    shelterMarkers.forEach((marker) => marker.setMap(null));
+    setShelterMarkers([]);
+
+    // 다시 렌더링
+    renderShelterMarkers();
+    setTimeout(() => setRefresh(false), 200);
   };
 
   // 현재 위치 마커
@@ -176,7 +168,18 @@ export default function ShelterMap({ mapId = "map" }) {
         >
           {currentOpen ? "현재위치" : "현재위치"}
         </button>
-
+        <button
+          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${
+            refresh ? "bg-blue-800 text-white" : "bg-white/60 text-black"
+          }`}
+          onClick={handleRefreshLocation}
+          style={{ position: "absolute", top: 100, left: "49%", zIndex: 999 }}
+        >
+          <span className="text-xl mr-2">
+            <IoRefresh />
+          </span>
+          새로고침
+        </button>
         <button
           className={`flex justify-center items-center px-4 py-2 rounded-2xl transition
             ${isOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"}`}

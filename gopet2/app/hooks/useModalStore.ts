@@ -75,7 +75,7 @@ export interface HotelData {
 
 interface ModalState {
   modalData: ShelterData | HospitalData | ParkData | FoodData | CafeData | HotelData | null;
-  setModalData: (data: ShelterData  | HospitalData | ParkData | FoodData | CafeData | HotelData | null) => void;
+  setModalData: (data: ShelterData | HospitalData | ParkData | FoodData | CafeData | HotelData | null) => void;
 }
 
 export const useModalStore = create<ModalState>((set) => ({
