@@ -7,19 +7,13 @@ import { AiOutlineEnvironment } from "react-icons/ai";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { LuPhone } from "react-icons/lu";
-import { useModalStore } from "../hooks/useModalStore";
+import { useModalStore, ShelterData } from "../hooks/useModalStore";
 import shelter from "../assets/json/shelter.json";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swiper from "swiper";
 import ShelterMap from "../components/map/ShelterMap";
 import "swiper/css";
-
-interface ShelterData {
-  name: string;
-  address: string;
-  phone: string;
-}
 
 export default function Shelter() {
   const { isNavOpen, toggleNav } = useToggleNav(false);
@@ -37,9 +31,15 @@ export default function Shelter() {
   const [shelterData, setShelterData] = useState<ShelterData[]>([]);
   useEffect(() => {
     const shelterData = shelter.map((data: any) => ({
-      name: data.name,
+      type: "shelter" as const,
+      title: data.name,
       address: data.address,
       phone: data.phone,
+      description: "",
+      charge: "",
+      lat: data.lat,
+      lng: data.lng,
+      url: "",
     }));
     setShelterData(shelterData);
   }, []);
@@ -83,10 +83,7 @@ export default function Shelter() {
   const currentPageGroup = Math.floor((currentPage - 1) / pageLimit);
   const startPage = currentPageGroup * pageLimit + 1;
   const endPage = Math.min(startPage + pageLimit - 1, totalPages);
-  const pageNumbers = Array.from(
-    { length: endPage - startPage + 1 },
-    (_, i) => startPage + i,
-  );
+  const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i,);
 
   const tabs = [
     {
