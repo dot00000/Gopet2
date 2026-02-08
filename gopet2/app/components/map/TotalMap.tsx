@@ -239,14 +239,14 @@ export default function TotalMap({
 
         {/* 버튼 */}
         <button
-          className="flex justify-center items-center px-4 py-2 rounded-2xl transition bg-white/60 text-black"
+          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${activeType === 'cafe' ? "bg-blue-800 text-white" : "bg-white/60 text-black"}`}
           onClick={handleCafeLocation}
           style={{ position: "absolute", top: 10, left: "40%", zIndex: 999 }}
         >
           카페
         </button>
         <button
-          className="flex justify-center items-center px-4 py-2 rounded-2xl transition bg-white/60 text-black"
+          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${activeType === "food" ? "bg-blue-800 text-white" : "bg-white/60 text-black"}`}
           onClick={handleFoodLocation}
           style={{ position: "absolute", top: 10, left: "45%", zIndex: 999 }}
         >
@@ -274,14 +274,14 @@ export default function TotalMap({
           현재위치
         </button>
         <button
-          className="flex justify-center items-center px-4 py-2 rounded-2xl transition bg-white/60 text-black"
+          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${activeType === "hospital" ? "bg-blue-800 text-white" : "bg-white/60 text-black"}`}
           onClick={handleHospitalLocation}
           style={{ position: "absolute", top: 10, left: "56%", zIndex: 999 }}
         >
           동물병원
         </button>
         <button
-          className="flex justify-center items-center px-4 py-2 rounded-2xl transition bg-white/60 text-black"
+          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${activeType === "park" ? "bg-blue-800 text-white" : "bg-white/60 text-black"}`}
           onClick={handleParkLocation}
           style={{ position: "absolute", top: 10, left: "62%", zIndex: 999 }}
         >
