@@ -1,46 +1,40 @@
 "use client";
 
 import "swiper/css";
+import { IoIosArrowBack, IoIosArrowForward, IoMdInformationCircleOutline } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
 import { useToggleNav } from "../hooks/useToggleNav";
 import { AiOutlineEnvironment, AiOutlineInfoCircle } from "react-icons/ai";
 import { GiPositionMarker } from "react-icons/gi";
-import {
-  CafeData,
-  FoodData,
-  HospitalData,
-  ParkData,
-  useModalStore,
-} from "../hooks/useModalStore";
+import { CafeData, FoodData, HospitalData, ParkData, useModalStore } from "../hooks/useModalStore";
 import { selectRegion } from "../hooks/useRegion";
-import { useNaverMaps } from "../hooks/useNaverMaps";
+import { CgWebsite } from "react-icons/cg";
+import { LuPhone } from "react-icons/lu";
 import TotalMap from "../components/map/TotalMap";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swiper from "swiper";
 import "swiper/css";
-import { CgWebsite } from "react-icons/cg";
-import { LuPhone } from "react-icons/lu";
 
 export default function Maps() {
   const modalData = useModalStore((state) => state.modalData);
-  const { regionData } = selectRegion();
-  const { mapRef } = useNaverMaps();
   const swiperRef = useRef<Swiper | null>(null);
   const { isNavOpen, toggleNav } = useToggleNav(false);
   const [activeTab, setActiveTab] = useState(0);
   const [open, setOpen] = useState(false);
 
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
+  const pageLimit = 5;
+
   // 지역 선택
+  const { regionData } = selectRegion();
   const [selectSido, setSelectSido] = useState("");
   const [selectSigungu, setSelectSigungu] = useState("");
 
   // 선택된 위치 저장
-  const [selectedLocation, setSelectedLocation] = useState<{
-    sido: string;
-    gungu: string;
-  }>({ sido: "", gungu: "" });
-
+  const [selectedLocation, setSelectedLocation] = useState<{ si: string; gungu: string; }>({ si: "", gungu: "" });
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [parkData, setParkData] = useState<ParkData[]>([]);
   const [foodData, setFoodData] = useState<FoodData[]>([]);
@@ -51,11 +45,11 @@ export default function Maps() {
       try {
         const res = await fetch("/api/kcisa");
         const json = await res.json();
-        const hospital: HospitalData[] = (json.data || [])
-          .filter((item: any) => item.category2 === "동물병원")
-          .map((item: any) => {
-            return {
-              type: "hospital",
+        const filteredMap = (category: string, type: string) => {
+          return (json.data || [])
+            .filter((item: any) => item.category2 === category)
+            .map((item: any) => ({
+              type,
               title: item.title,
               address: item.address,
               description: item.description ?? "",
@@ -66,63 +60,12 @@ export default function Maps() {
               url: item.url,
               si: item.si,
               gungu: item.gungu,
-            };
-          });
-        const park: ParkData[] = (json.data || [])
-          .filter((item: any) => item.category2 === "여행지")
-          .map((item: any) => {
-            return {
-              type: "park",
-              title: item.title,
-              address: item.address,
-              description: item.description ?? "",
-              charge: item.charge ?? "",
-              lat: Number(item.lat),
-              lng: Number(item.lng),
-              tel: item.tel,
-              url: item.url,
-              si: item.si,
-              gungu: item.gungu,
-            };
-          });
-        const cafe: CafeData[] = (json.data || [])
-          .filter((item: any) => item.category2 === "카페")
-          .map((item: any) => {
-            return {
-              type: "cafe",
-              title: item.title,
-              address: item.address,
-              description: item.description ?? "",
-              charge: item.charge ?? "",
-              lat: Number(item.lat),
-              lng: Number(item.lng),
-              tel: item.tel,
-              url: item.url,
-              si: item.si,
-              gungu: item.gungu,
-            };
-          });
-        const food: FoodData[] = (json.data || [])
-          .filter((item: any) => item.category2 === "식당")
-          .map((item: any) => {
-            return {
-              type: "food",
-              title: item.title,
-              address: item.address,
-              description: item.description ?? "",
-              charge: item.charge ?? "",
-              lat: Number(item.lat),
-              lng: Number(item.lng),
-              tel: item.tel,
-              url: item.url,
-              si: item.si,
-              gungu: item.gungu,
-            };
-          });
-        setHospitalData(hospital);
-        setParkData(park);
-        setCafeData(cafe);
-        setFoodData(food);
+            }));
+        };
+        setHospitalData(filteredMap("동물병원", "hospital"));
+        setParkData(filteredMap("여행지", "park"));
+        setCafeData(filteredMap("카페", "cafe"));
+        setFoodData(filteredMap("식당", "food"));
       } catch (err) {
         console.log(err);
       }
@@ -158,6 +101,48 @@ export default function Maps() {
       swiperRef.current.slideNext();
     }
   };
+
+  const getFilteredData = (data: any[]) => {
+    return data.filter((item) => {
+      // if (!selectedLocation.si) return true;
+      if (selectedLocation.si && !selectedLocation.gungu) {
+      return item.si === selectedLocation.si;
+    }
+    return (
+      item.si === selectedLocation.si && item.gungu === selectedLocation.gungu
+    );
+  });
+  }
+  const getPaginationData = (filteredData: any[]) => {
+    const totalItems = filteredData.length || 0;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentItems = filteredData.slice(startIndex, startIndex + itemsPerPage);
+
+     const currentPageGroup = Math.floor((currentPage - 1) / pageLimit);
+     const startPage = currentPageGroup * pageLimit + 1;
+     const endPage = Math.min(startPage + pageLimit - 1, totalPages);
+     const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+
+     return {
+      totalItems,
+      totalPages,
+      currentItems,
+      startPage,
+      endPage,
+      pageNumbers
+     };
+  };
+
+  const filteredHospitalData = getFilteredData(hospitalData);
+  const filteredFoodData = getFilteredData(foodData);
+  const filteredParkData = getFilteredData(parkData);
+  const filteredCafeData = getFilteredData(cafeData);
+
+  const hospitalPagination = getPaginationData(filteredHospitalData);
+  const foodPagination = getPaginationData(filteredFoodData);
+  const parkPagination = getPaginationData(filteredParkData);
+  const cafePagination = getPaginationData(filteredCafeData);
 
   const tabs = [
     {
@@ -197,7 +182,14 @@ export default function Maps() {
                     <span className="text-2xl">
                       <CgWebsite />
                     </span>
-                    <span className="ml-2 mb-2 text-base">{modalData.url}</span>
+                    <a
+                      href={modalData.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-2 mb-2 text-base hover:underline cursor-pointer"
+                    >
+                      {modalData.url ? modalData.url : "홈페이지 없음"}
+                    </a>
                   </div>
                   <div className="flex">
                     <span className="text-2xl">
@@ -218,8 +210,8 @@ export default function Maps() {
       content: (
         <>
           <hr className="border-t border-gray-300 my-4" />
-          <div className="flex justify-center gap-5">
-            <div className="flex rounded-2xl text-xl py-3 mb-5 px-3 mr-2 bg-blue-500 text-white">
+          <div className="flex justify-center gap-3">
+            <div className="flex rounded-2xl text-xl py-2 mb-5 px-3 bg-blue-500 text-white">
               <GiPositionMarker className="text-3xl mr-2" /> 지 역
             </div>
             <select
@@ -229,75 +221,118 @@ export default function Maps() {
                 setSelectSido(newSido);
                 setSelectSigungu("");
               }}
-              className={
-                "px-3 py-3 mb-5 mr-2 bg-white rounded-2xl hover:bg-gray-200"
-              }
+              className={"px-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"}
             >
               <option value="">시/도 선택</option>
-              {Object.keys(regionData).map((sido) => (
-                <option key={sido} value={sido}>
-                  {sido}
+              {Object.keys(regionData).map((si) => (
+                <option key={si} value={si}>
+                  {si}
                 </option>
               ))}
             </select>
             <select
               value={selectSigungu}
               onChange={(e) => setSelectSigungu(e.target.value)}
-              className="px-3 py-3 mb-5 mr-2 bg-white rounded-2xl hover:bg-gray-200"
+              className="px-3 py-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"
             >
               <option value="">시/군/구</option>
               {selectSido &&
-                regionData[selectSigungu].map((sigungu) => (
-                  <option key={sigungu} value={sigungu}>
-                    {sigungu}
+                regionData[selectSido]?.map((gungu) => (
+                  <option key={gungu} value={gungu}>
+                    {gungu}
                   </option>
                 ))}
             </select>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setSelectedLocation({
+                  si: selectSido,
+                  gungu: selectSigungu,
+                });
+                setCurrentPage(1); // 리셋
+              }}
+              className="flex rounded-2xl text-xl py-2 mb-5 px-4 bg-blue-500 text-white cursor-pointer"
+            >
+              검색
+            </button>
           </div>
-          <div
-            className="flex justify-center items-center mb-5"
-            style={{ minHeight: "900px", overflowY: "auto" }}
-          >
-            <div className="flex flex-col items-center mb-4 no-scrollbar">
-              {cafeData.map((data: any, index: any) => (
-                <div
-                  key={index}
-                  className="bg-white justify-center items-center rounded-2xl p-4 mt-5 mb-5"
-                  style={{ width: "400px", minHeight: "200px" }}
-                >
-                  <p className="flex justify-center items-center text-lg font-bold m-3">
-                    {data.title}
-                  </p>
-                  <hr className="border-t border-gray-300 my-4" />
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <AiOutlineEnvironment />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.address}</span>
+          <div className="flex flex-col items-center h-[800px]">
+            <div className="flex flex-col items-center flex-1 overflow-y-auto no-scrollbar p-5">
+              {cafePagination.currentItems
+                .map((data: any, index: any) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl p-3 mb-8"
+                    style={{ width: "400px", minHeight: "320px" }}
+                  >
+                    <p className="flex justify-center text-xl font-bold m-2">
+                      {data.title}
+                    </p>
+                    <hr className="border-t border-gray-300 my-4" />
+                    <div className="flex py-1">
+                      <AiOutlineEnvironment className="text-2xl" />
+                      <span className="ml-2">{data.address}</span>
+                    </div>
+
+                    <div className="flex py-1">
+                      <IoMdInformationCircleOutline className="text-2xl flex-shrink-0" />
+                      <span className="ml-2">{data.description}</span>
+                    </div>
+
+                    <div className="flex py-1">
+                      <CgWebsite className="text-2xl" />
+                      <a
+                        href={data.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-2 hover:underline break-all"
+                      >
+                        {data.url ? data.url : "홈페이지 없음"}
+                      </a>
+                    </div>
+
+                    <div className="flex">
+                      <LuPhone className="text-2xl" />
+                      <span className="ml-2">{data.tel}</span>
+                    </div>
                   </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <AiOutlineInfoCircle />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">
-                      {data.description}
-                    </span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <CgWebsite />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.url}</span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <LuPhone />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.tel}</span>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
+            {/* pagination */}
+            <section className="py-4 flex justify-center space-x-2">
+              <button
+                onClick={() => setCurrentPage(cafePagination.startPage - 1)}
+                disabled={cafePagination.startPage === 1}
+                className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
+              >
+                <IoIosArrowBack />
+              </button>
+
+              {cafePagination.pageNumbers.map((number) => (
+                <button
+                  key={number}
+                  onClick={() => {
+                    setCurrentPage(number);
+                  }}
+                  className={`px-4 py-2 rounded-lg font-bold ${
+                    currentPage === number
+                      ? "bg-blue-800 text-white"
+                      : "bg-white border text-gray-600"
+                  }`}
+                >
+                  {number}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(cafePagination.endPage + 1)}
+                disabled={cafePagination.endPage === cafePagination.totalPages}
+                className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
+              >
+                <IoIosArrowForward />
+              </button>
+            </section>
           </div>
         </>
       ),
@@ -308,50 +343,129 @@ export default function Maps() {
       content: (
         <>
           <hr className="border-t border-gray-300 my-4" />
-          <div
-            className="flex justify-center items-center mb-5"
-            style={{ minHeight: "900px", overflowY: "auto" }}
-          >
-            <div className="flex flex-col items-center mb-4 no-scrollbar">
-              {foodData.map((data: any, index: any) => (
-                <div
-                  key={index}
-                  className="bg-white justify-center items-center rounded-2xl p-4 mt-5 mb-5"
-                  style={{ width: "400px", minHeight: "200px" }}
-                >
-                  <p className="flex justify-center items-center text-lg font-bold m-3">
-                    {data.title}
-                  </p>
-                  <hr className="border-t border-gray-300 my-4" />
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <AiOutlineEnvironment />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.address}</span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <AiOutlineInfoCircle />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">
-                      {data.description}
-                    </span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <CgWebsite />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.url}</span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <LuPhone />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.tel}</span>
-                  </div>
-                </div>
-              ))}
+          <div className="flex justify-center gap-3">
+            <div className="flex rounded-2xl text-xl py-2 mb-5 px-3 bg-blue-500 text-white">
+              <GiPositionMarker className="text-3xl mr-2" /> 지 역
             </div>
+            <select
+              value={selectSido}
+              onChange={(e) => {
+                const newSido = e.target.value;
+                setSelectSido(newSido);
+                setSelectSigungu("");
+              }}
+              className={"px-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"}
+            >
+              <option value="">시/도 선택</option>
+              {Object.keys(regionData).map((si) => (
+                <option key={si} value={si}>
+                  {si}
+                </option>
+              ))}
+            </select>
+            <select
+              value={selectSigungu}
+              onChange={(e) => setSelectSigungu(e.target.value)}
+              className="px-3 py-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"
+            >
+              <option value="">시/군/구</option>
+              {selectSido &&
+                regionData[selectSido]?.map((gungu) => (
+                  <option key={gungu} value={gungu}>
+                    {gungu}
+                  </option>
+                ))}
+            </select>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setSelectedLocation({
+                  si: selectSido,
+                  gungu: selectSigungu,
+                });
+                setCurrentPage(1); // 리셋
+              }}
+              className="flex rounded-2xl text-xl py-2 mb-5 px-4 bg-blue-500 text-white cursor-pointer"
+            >
+              검색
+            </button>
+          </div>
+          <div className="flex flex-col items-center h-[800px]">
+            <div className="flex flex-col items-center flex-1 overflow-y-auto no-scrollbar p-5">
+              {foodPagination.currentItems
+                .map((data: any, index: any) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl p-3 mb-8"
+                    style={{ width: "400px", minHeight: "300px" }}
+                  >
+                    <p className="flex justify-center text-xl font-bold m-2">
+                      {data.title}
+                    </p>
+                    <hr className="border-t border-gray-300 my-4" />
+                    <div className="flex py-1">
+                      <AiOutlineEnvironment className="text-2xl" />
+                      <span className="ml-2">{data.address}</span>
+                    </div>
+
+                    <div className="flex py-1">
+                      <IoMdInformationCircleOutline className="text-2xl flex-shrink-0" />
+                      <span className="ml-2">{data.description}</span>
+                    </div>
+
+                    <div className="flex py-1">
+                      <CgWebsite className="text-2xl" />
+                      <a
+                        href={data.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-2 hover:underline break-all"
+                      >
+                        {data.url ? data.url : "홈페이지 없음"}
+                      </a>
+                    </div>
+
+                    <div className="flex">
+                      <LuPhone className="text-2xl" />
+                      <span className="ml-2">{data.tel}</span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            {/* pagination */}
+            <section className="py-4 flex justify-center space-x-2">
+              <button
+                onClick={() => setCurrentPage(foodPagination.startPage - 1)}
+                disabled={foodPagination.startPage === 1}
+                className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
+              >
+                <IoIosArrowBack />
+              </button>
+
+              {foodPagination.pageNumbers.map((number) => (
+                <button
+                  key={number}
+                  onClick={() => {
+                    setCurrentPage(number);
+                  }}
+                  className={`px-4 py-2 rounded-lg font-bold ${
+                    currentPage === number
+                      ? "bg-blue-800 text-white"
+                      : "bg-white border text-gray-600"
+                  }`}
+                >
+                  {number}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(foodPagination.endPage + 1)}
+                disabled={foodPagination.endPage === foodPagination.totalPages}
+                className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
+              >
+                <IoIosArrowForward />
+              </button>
+            </section>
           </div>
         </>
       ),
@@ -362,50 +476,134 @@ export default function Maps() {
       content: (
         <>
           <hr className="border-t border-gray-300 my-4" />
-          <div
-            className="flex justify-center items-center mb-5"
-            style={{ minHeight: "900px", overflowY: "auto" }}
-          >
-            <div className="flex flex-col items-center mb-4 no-scrollbar">
-              {hospitalData.map((data: any, index: any) => (
-                <div
-                  key={index}
-                  className="bg-white justify-center items-center rounded-2xl p-4 mt-5 mb-5"
-                  style={{ width: "400px", minHeight: "200px" }}
-                >
-                  <p className="flex justify-center items-center text-lg font-bold m-3">
-                    {data.title}
-                  </p>
-                  <hr className="border-t border-gray-300 my-4" />
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <AiOutlineEnvironment />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.address}</span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <AiOutlineInfoCircle />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">
-                      {data.description}
-                    </span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <CgWebsite />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.url}</span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <LuPhone />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.tel}</span>
-                  </div>
-                </div>
-              ))}
+          <div className="flex justify-center gap-3">
+            <div className="flex rounded-2xl text-xl py-2 mb-5 px-3 bg-blue-500 text-white">
+              <GiPositionMarker className="text-3xl mr-2" /> 지 역
             </div>
+            <select
+              value={selectSido}
+              onChange={(e) => {
+                const newSido = e.target.value;
+                setSelectSido(newSido);
+                setSelectSigungu("");
+              }}
+              className={"px-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"}
+            >
+              <option value="">시/도 선택</option>
+              {Object.keys(regionData).map((si) => (
+                <option key={si} value={si}>
+                  {si}
+                </option>
+              ))}
+            </select>
+            <select
+              value={selectSigungu}
+              onChange={(e) => setSelectSigungu(e.target.value)}
+              className="px-3 py-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"
+            >
+              <option value="">시/군/구</option>
+              {selectSido &&
+                regionData[selectSido]?.map((gungu) => (
+                  <option key={gungu} value={gungu}>
+                    {gungu}
+                  </option>
+                ))}
+            </select>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setSelectedLocation({
+                  si: selectSido,
+                  gungu: selectSigungu,
+                });
+                setCurrentPage(1); // 리셋
+              }}
+              className="flex rounded-2xl text-xl py-2 mb-5 px-4 bg-blue-500 text-white cursor-pointer"
+            >
+              검색
+            </button>
+          </div>
+          <div className="flex flex-col items-center h-[800px]">
+            <div className="flex flex-col items-center flex-1 overflow-y-auto no-scrollbar p-5">
+              {hospitalPagination.currentItems
+                .filter(
+                  (data) =>
+                    data.si === selectedLocation.si &&
+                    data.gungu === selectedLocation.gungu,
+                )
+                .map((data: any, index: any) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl p-3 mb-8"
+                    style={{ width: "400px", minHeight: "300px" }}
+                  >
+                    <p className="flex justify-center text-xl font-bold m-2">
+                      {data.title}
+                    </p>
+                    <hr className="border-t border-gray-300 my-4" />
+                    <div className="flex py-1">
+                      <AiOutlineEnvironment className="text-2xl" />
+                      <span className="ml-2">{data.address}</span>
+                    </div>
+
+                    <div className="flex py-1">
+                      <IoMdInformationCircleOutline className="text-2xl flex-shrink-0" />
+                      <span className="ml-2">{data.description}</span>
+                    </div>
+
+                    <div className="flex py-1">
+                      <CgWebsite className="text-2xl" />
+                      <a
+                        href={data.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-2 hover:underline break-all"
+                      >
+                        {data.url ? data.url : "홈페이지 없음"}
+                      </a>
+                    </div>
+
+                    <div className="flex">
+                      <LuPhone className="text-2xl" />
+                      <span className="ml-2">{data.tel}</span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            {/* pagination */}
+            <section className="py-4 flex justify-center space-x-2">
+              <button
+                onClick={() => setCurrentPage(hospitalPagination.startPage - 1)}
+                disabled={hospitalPagination.startPage === 1}
+                className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
+              >
+                <IoIosArrowBack />
+              </button>
+
+              {hospitalPagination.pageNumbers.map((number) => (
+                <button
+                  key={number}
+                  onClick={() => {
+                    setCurrentPage(number);
+                  }}
+                  className={`px-4 py-2 rounded-lg font-bold ${
+                    currentPage === number
+                      ? "bg-blue-800 text-white"
+                      : "bg-white border text-gray-600"
+                  }`}
+                >
+                  {number}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(hospitalPagination.endPage + 1)}
+                disabled={hospitalPagination.endPage === hospitalPagination.totalPages}
+                className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
+              >
+                <IoIosArrowForward />
+              </button>
+            </section>
           </div>
         </>
       ),
@@ -416,50 +614,133 @@ export default function Maps() {
       content: (
         <>
           <hr className="border-t border-gray-300 my-4" />
-          <div
-            className="flex justify-center items-center mb-5"
-            style={{ minHeight: "900px", overflowY: "auto" }}
-          >
-            <div className="flex flex-col items-center mb-4 no-scrollbar">
-              {parkData.map((data: any, index: any) => (
-                <div
-                  key={index}
-                  className="bg-white justify-center items-center rounded-2xl p-4 mt-5 mb-5"
-                  style={{ width: "400px", minHeight: "200px" }}
-                >
-                  <p className="flex justify-center items-center text-lg font-bold m-3">
-                    {data.title}
-                  </p>
-                  <hr className="border-t border-gray-300 my-4" />
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <AiOutlineEnvironment />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.address}</span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <AiOutlineInfoCircle />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">
-                      {data.description}
-                    </span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <CgWebsite />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.url}</span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-2xl">
-                      <LuPhone />
-                    </span>
-                    <span className="ml-2 mb-2 text-base">{data.tel}</span>
-                  </div>
-                </div>
-              ))}
+          <div className="flex justify-center gap-3">
+            <div className="flex rounded-2xl text-xl py-2 mb-5 px-3 bg-blue-500 text-white">
+              <GiPositionMarker className="text-3xl mr-2" /> 지 역
             </div>
+            <select
+              value={selectSido}
+              onChange={(e) => {
+                const newSido = e.target.value;
+                setSelectSido(newSido);
+                setSelectSigungu("");
+              }}
+              className={"px-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"}
+            >
+              <option value="">시/도 선택</option>
+              {Object.keys(regionData).map((si) => (
+                <option key={si} value={si}>
+                  {si}
+                </option>
+              ))}
+            </select>
+            <select
+              value={selectSigungu}
+              onChange={(e) => setSelectSigungu(e.target.value)}
+              className="px-3 py-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"
+            >
+              <option value="">시/군/구</option>
+              {selectSido &&
+                regionData[selectSido]?.map((gungu) => (
+                  <option key={gungu} value={gungu}>
+                    {gungu}
+                  </option>
+                ))}
+            </select>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setSelectedLocation({
+                  si: selectSido,
+                  gungu: selectSigungu,
+                });
+                setCurrentPage(1); // 리셋
+              }}
+              className="flex rounded-2xl text-xl py-2 mb-5 px-4 bg-blue-500 text-white cursor-pointer"
+            >
+              검색
+            </button>
+          </div>
+          <div className="flex flex-col items-center h-[800px]">
+            <div className="flex flex-col items-center flex-1 overflow-y-auto no-scrollbar p-5">
+              {parkPagination.currentItems
+                .filter(
+                  (data) =>
+                    data.si === selectedLocation.si &&
+                    data.gungu === selectedLocation.gungu,
+                )
+                .map((data: any, index: any) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl p-3 mb-8"
+                    style={{ width: "400px", minHeight: "320px" }}
+                  >
+                    <p className="flex justify-center text-xl font-bold m-2">
+                      {data.title}
+                    </p>
+                    <hr className="border-t border-gray-300 my-4" />
+                    <div className="flex py-1">
+                      <AiOutlineEnvironment className="text-2xl" />
+                      <span className="ml-2">{data.address}</span>
+                    </div>
+
+                    <div className="flex py-1">
+                      <IoMdInformationCircleOutline className="text-2xl flex-shrink-0" />
+                      <span className="ml-2">{data.description}</span>
+                    </div>
+
+                    <div className="flex py-1">
+                      <CgWebsite className="text-2xl" />
+                      <a
+                        href={data.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-2 hover:underline break-all"
+                      >
+                        {data.url ? data.url : "홈페이지 없음"}
+                      </a>
+                    </div>
+
+                    <div className="flex">
+                      <LuPhone className="text-2xl" />
+                      <span className="ml-2">{data.tel}</span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            {/* pagination */}
+            <section className="py-4 flex justify-center space-x-2">
+              <button
+                onClick={() => setCurrentPage(parkPagination.startPage - 1)}
+                disabled={parkPagination.startPage === 1}
+                className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
+              >
+                <IoIosArrowBack />
+              </button>
+              {parkPagination.pageNumbers.map((number) => (
+                <button
+                  key={number}
+                  onClick={() => {
+                    setCurrentPage(number);
+                  }}
+                  className={`px-4 py-2 rounded-lg font-bold ${
+                    currentPage === number
+                      ? "bg-blue-800 text-white"
+                      : "bg-white border text-gray-600"
+                  }`}
+                >
+                  {number}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(parkPagination.endPage + 1)}
+                disabled={parkPagination.endPage === parkPagination.totalPages}
+                className="p-2 bg-gray-200 rounded-lg disabled:opacity-30"
+              >
+                <IoIosArrowForward />
+              </button>
+            </section>
           </div>
         </>
       ),
@@ -469,13 +750,7 @@ export default function Maps() {
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <section className="relative min-h-screen">
-        <TotalMap
-          hospital={hospitalData}
-          park={parkData}
-          food={foodData}
-          cafe={cafeData}
-        />
-        {/* SideBar (Map 위에 포개짐) */}
+        <TotalMap hospital={hospitalData} park={parkData} food={foodData} cafe={cafeData}/>
         <div className="absolute top-0 left-0 min-h-screen z-10">
           <div className="w-[560px]">
             <div className="swiper relative">
@@ -520,5 +795,5 @@ export default function Maps() {
         <Footer />
       </section>
     </>
-  );
+  )
 }

@@ -71,6 +71,7 @@ export default function Hotel() {
     };
     fetchHotels();
   }, []);
+  
   const filteredData = hotelData.filter((data) => {
     if (!selectedLocation.si) return true;
     if (selectedLocation.si && !selectedLocation.gungu) {
