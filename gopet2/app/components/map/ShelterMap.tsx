@@ -156,9 +156,7 @@ export default function ShelterMap({ mapId = "map" }) {
           strategy="afterInteractive"
           onLoad={() => initMap(mapId)}
         />
-
         {modalData && <div className="modal">{modalData.title}</div>}
-
         <button
           className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${
             currentOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"

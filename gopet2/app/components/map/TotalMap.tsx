@@ -171,6 +171,7 @@ export default function TotalMap({ mapId = "map", hospital, park, cafe, food }: 
 
     setCafeMarkers(newMarkers);
   };
+  
   const handleCafeLocation = () => {
     if (!mapRef.current) return;
     if (!isOpen) {

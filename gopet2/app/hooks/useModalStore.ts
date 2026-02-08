@@ -10,6 +10,8 @@ export interface ShelterData {
   lat: number;
   lng: number;
   url: string;
+  si: string;
+  gungu: string;
 }
 
 export interface HospitalData {
@@ -22,6 +24,8 @@ export interface HospitalData {
   lat: number;
   lng: number;
   url: string;
+  si: string;
+  gungu: string;
 }
 
 export interface ParkData {
@@ -34,6 +38,8 @@ export interface ParkData {
   lat: number;
   lng: number;
   url: string;
+  si: string;
+  gungu: string;
 }
 
 export interface FoodData {
@@ -46,6 +52,8 @@ export interface FoodData {
   lat: number;
   lng: number;
   url: string;
+  si: string;
+  gungu: string;
 }
 
 export interface CafeData {
@@ -58,6 +66,8 @@ export interface CafeData {
   lat: number;
   lng: number;
   url: string;
+  si: string;
+  gungu: string;
 }
 
 export interface HotelData {
@@ -70,6 +80,8 @@ export interface HotelData {
   lat: number;
   lng: number;
   url: string;
+  si: string;
+  gungu: string;
 }
 
 

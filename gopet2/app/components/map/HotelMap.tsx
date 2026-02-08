@@ -1,8 +1,9 @@
 "use client";
 import Script from "next/script";
 import { useNaverMaps } from "../../hooks/useNaverMaps";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { HotelData, useModalStore } from "../../hooks/useModalStore";
+import { IoRefresh } from "react-icons/io5";
 
 export default function HotelMap({
   mapId = "map",
@@ -20,21 +21,13 @@ export default function HotelMap({
 
   const [currentOpen, setCurrentOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
-  const hasSetIdleListener = useRef(false);
-  const modalData = useModalStore((state) => state.modalData);
-  const setModalData = useModalStore((state) => state.setModalData);
-
-  // 호텔 마커
+  const [refresh, setRefresh] = useState(false);
   const [hotelMarkers, setHotelMarkers] = useState<naver.maps.Marker[]>([]);
   // 현재 위치
   const [currentLocation, setCurrentLocation] =
     useState<naver.maps.Marker | null>(null);
-  // 선택된 위치 저장
-  // const [selectedLocation, setSelectedLocation] = useState<{
-  //   sido: string;
-  //   gungu: string;
-  // }>({ sido: "", gungu: "" });
+  const modalData = useModalStore((state) => state.modalData);
+  const setModalData = useModalStore((state) => state.setModalData);
 
   useEffect(() => {
     const mapHotels: HotelData[] = hotels.map((data: any) => ({
@@ -45,12 +38,14 @@ export default function HotelMap({
       url: data.url,
       lat: Number(data.lat),
       lng: Number(data.lng),
+      si: data.si,
+      gungu: data.gungu,
       description: data.description || "",
       charge: data.charge || "",
     }));
     mapHotels;
   }, [hotels]);
-  
+
   const renderHotelMarkers = () => {
     const map = mapRef.current;
     if (!map || hotels.length === 0) return;
@@ -108,7 +103,17 @@ export default function HotelMap({
       setIsOpen(false);
     }
   };
+  // 새로고침 버튼
+  const handleRefreshLocation = () => {
+    if (!isOpen) return;
+    setRefresh(true);
 
+    hotelMarkers.forEach((marker) => marker.setMap(null));
+    setHotelMarkers([]);
+
+    renderHotelMarkers();
+    setTimeout(() => setRefresh(false), 200);
+  };
   // 현재 위치 마커
   const handleCurrentLocation = () => {
     if (!currentOpen) {
@@ -163,7 +168,18 @@ export default function HotelMap({
         >
           {currentOpen ? "현재위치" : "현재위치"}
         </button>
-
+        <button
+          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${
+            refresh ? "bg-blue-800 text-white" : "bg-white/60 text-black"
+          }`}
+          onClick={handleRefreshLocation}
+          style={{ position: "absolute", top: 100, left: "49%", zIndex: 999 }}
+        >
+          <span className="text-xl mr-2">
+            <IoRefresh />
+          </span>
+          새로고침
+        </button>
         <button
           className={`flex justify-center items-center px-4 py-2 rounded-2xl transition
             ${isOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"}`}

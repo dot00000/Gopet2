@@ -40,6 +40,8 @@ export default function Shelter() {
       lat: data.lat,
       lng: data.lng,
       url: "",
+      si: "",
+      gungu: ""
     }));
     setShelterData(shelterData);
   }, []);
@@ -137,7 +139,7 @@ export default function Shelter() {
                   style={{ width: "400px", minHeight: "200px" }}
                 >
                   <p className="flex justify-center items-center text-xl font-bold m-3">
-                    {data.name}
+                    {data.title}
                   </p>
                   <hr className="border-t border-gray-300 my-4" />
                   <div className="flex">
