@@ -24,8 +24,6 @@ export default function PetNews() {
   const itemsPerPage = 6;
   const pageLimit = 5;
 
-  
-
 useEffect(() => {
   const fetchData = async () => {
     try {
