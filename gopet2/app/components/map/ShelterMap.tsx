@@ -80,6 +80,8 @@ export default function ShelterMap({ mapId = "map" }) {
           lat: shelter.lat,
           lng: shelter.lng,
           url: "",
+          si: "",
+          gungu: "",
         });
       });
 
