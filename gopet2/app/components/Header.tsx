@@ -26,13 +26,10 @@ const Header: React.FC<HeaderProps> = ( {isNavOpen, toggleNav}) => {
             <h1 className="ml-5 text-3xl">고 펫</h1>
           </div>
         </Link>
-        {/* <div className="flex flex-grow justify-center m-5 items-center" >
-            <ListSearch />
-        </div> */}
       </div>
       <div className="flex justify-end items-center">
         <button onClick={toggleNav}>
-          <FiMenu/>
+          <FiMenu className="text-2xl"/>
         </button>
       </div>
       <div className="col-span-2 p-0">
