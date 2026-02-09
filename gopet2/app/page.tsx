@@ -16,7 +16,6 @@ export default function Home() {
   return (
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav}/>
-      {/* <HotelShelter/> */}
       <Festival/>
       <NewsList/>
       <AdoptEmblaCarousel slides={SLIDES} options={OPTIONS}/>

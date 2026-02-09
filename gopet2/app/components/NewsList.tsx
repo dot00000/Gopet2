@@ -38,9 +38,9 @@ const NewsList = () => {
     
     return (
     <>
-      <Link href="/petnews" className="flex text-4xl p-8 mt-5" style={{ width: "200px" }}>
-        <h1 className="mr-2">News</h1>
-        <LuPlus className="mt-1 stroke-[3px]" />
+      <Link href="/petnews" className="flex text-4xl p-8 mt-5" style={{ width: "250px" }}>
+        <h1 className="flex mr-2">News</h1>
+        <LuPlus className="mt-3 text-2xl stroke-[4px]" />
       </Link>
       <section className="flex justify-evenly items-center">
         {loading ? (

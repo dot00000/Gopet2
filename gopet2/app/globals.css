@@ -77,6 +77,11 @@ body {
   background-color: #111828;
 }
 
+.mySwiper .swiper-pagination-bullet-active {
+  background-color: #ffffff;
+  opacity: 1;
+}
+
 .bar {
   display: block;
   width: 40px;
