@@ -18,15 +18,9 @@ const NewsList = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-          const response = await axios.get(
-          "https://newsapi.org/v2/everything?q=반려동물+OR+강아지&language=ko&sortBy=publishedAt&apiKey=318fa0d4e74f43f880ad2ce0960297a5");
-        // URL 기준으로 중복 제거
-        const uniqueArticles = Array.from(
-            new Map<string, Article>(
-              response.data.articles.map((article: Article) => [article.url, article])
-            ).values()
-          );
-          setArticles(uniqueArticles.slice(0, 3));
+          const response = await fetch("/api/news");
+          const data = await response.json();
+          setArticles(data.slice(0, 3));
         } catch (e) {
           console.error(e);
         } finally {

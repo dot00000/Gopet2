@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import NewsItem from "../components/NewsItem";
-import axios from "axios";
 import Header from "../components/Header";
 import { useToggleNav } from "../hooks/useToggleNav";
 
@@ -29,25 +28,18 @@ export default function PetNews() {
 
 useEffect(() => {
   const fetchData = async () => {
-    setLoading(true);
     try {
-      const response = await axios.get(
-        "https://newsapi.org/v2/everything?q=반려동물+OR+강아지&language=ko&sortBy=publishedAt&apiKey=318fa0d4e74f43f880ad2ce0960297a5"
-      );
-
-      // URL 기준으로 중복 제거
-      const uniqueArticles = Array.from(
-          new Map<string, Article>(
-            response.data.articles.map((article: Article) => [article.url, article])
-          ).values()
-        );
-        setArticles(uniqueArticles);
+      const res = await fetch("/api/news");
+      const response = await res.json();
+      setArticles(response.data || []);
       } catch (e) {
         console.error(e);
+        setArticles([]);
       } finally {
         setLoading(false);
       }
     };
+    
   fetchData();
 }, []);
 
