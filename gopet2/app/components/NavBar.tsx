@@ -3,35 +3,35 @@ import styles from "./NavBar.module.css";
 import Image from "next/image";
 const NavBar: React.FC = () => {
   return (
-    <nav className="flex gap-4 p-4 bg-gray-100 text-center justify-center">
-      <Link href="/hotel" className="w-1/6 min-w-[100px]">
+    <nav className="flex p-4 bg-gray-100 text-center justify-evenly">
+      <Link href="/hotel" className="flex-1 max-w-[210px]">
         <div className={styles.nav_box}>
           <Image src="/images/navmenu/hotel.png" alt="숙박 아이콘" width={110} height={20} className="border-10"/>
           <h2 className={styles.nav_font}>숙 소</h2>
         </div>
       </Link>
-      <Link href="/maps" className="w-1/6 min-w-[100px]">
+      <Link href="/maps" className="flex-1 max-w-[210px]">
         <div className={styles.nav_box}>
           <Image src="/images/navmenu/food.png" alt="음식 아이콘" width={110} height={20} className="border-10
           "/>
           <h2 className={styles.nav_font}>지 도</h2>
         </div>
       </Link>
-      <Link href="/adoption" className="w-1/6 min-w-[100px]">
+      <Link href="/adoption" className="flex-1 max-w-[210px]">
         <div className={styles.nav_box}>
           <Image src="/images/navmenu/adopt.png" alt="체험 아이콘" width={110} height={20} className="border-10
           "/>
           <h2 className={styles.nav_font}>보호소입양</h2>
         </div>
       </Link>
-      <Link href="/shelter" className="w-1/6 min-w-[100px]">
+      <Link href="/shelter" className="flex-1 max-w-[210px]">
         <div className={styles.nav_box}>
           <Image src="/images/navmenu/shelter.png" alt="봉사/보호소 아이콘" width={110} height={20} className="border-10
           "/>
           <h2 className={styles.nav_font}>보호소</h2>
         </div>
       </Link>
-      <Link href="/petnews" className="w-1/6 min-w-[100px]">
+      <Link href="/petnews" className="flex-1 max-w-[210px]">
         <div className={styles.nav_box}>
           <Image src="/images/navmenu/petnews.png" alt="뉴스 아이콘" width={110} height={20} className="border-10
           "/>
