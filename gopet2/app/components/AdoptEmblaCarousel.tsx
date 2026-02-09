@@ -59,7 +59,7 @@ const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
 
   return (
       <>
-      <h1 className="text-3xl p-5">보호소 입양</h1>
+      <h1 className="text-3xl p-5 ml-4">보호소 입양</h1>
         <div className="embla">
           <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
