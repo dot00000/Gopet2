@@ -62,6 +62,8 @@ export default function Maps() {
               gungu: item.gungu,
             }));
         };
+        console.log(json);
+        
         setHospitalData(filteredMap("동물병원", "hospital"));
         setParkData(filteredMap("여행지", "park"));
         setCafeData(filteredMap("카페", "cafe"));
