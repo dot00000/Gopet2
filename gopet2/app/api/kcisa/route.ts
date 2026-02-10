@@ -11,9 +11,9 @@ export async function GET() {
       
       // 하루 안 지났으면 기존 데이터 반환
       if (blobInfo && Date.now() - new Date(blobInfo.uploadedAt).getTime() < ONE_DAY) {
-        const response = await fetch(blobInfo.url);
-        const cached = await response.json();
-        
+        const blobResponse = await fetch(blobInfo.url);
+        const blobText = await blobResponse.text(); 
+        const cached = JSON.parse(blobText); 
         return Response.json({
           success: true,
           data: cached,
@@ -21,13 +21,13 @@ export async function GET() {
         });
       }
     } catch {
-      // 캐시 없음 - 새로 가져오기
+  
     }
 
     // 새로 API 호출
-    const apiKey = `https://api.kcisa.kr/openapi/API_TOU_050/request?serviceKey=${process.env.KCISA_API_KEY}&type=json`;
+    const apiUrl = `https://api.kcisa.kr/openapi/API_TOU_050/request?serviceKey=${process.env.KCISA_API_KEY}&type=json`;
     
-    const response = await fetch(apiKey, {
+    const response = await fetch(apiUrl, {
       headers: { Accept: "application/json" },
     });
 
