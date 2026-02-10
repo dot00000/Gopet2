@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.20",
-    "axios": "^1.13.4",
+    "axios": "^1.13.5",
     "embla": "^1.0.0",
     "embla-carousel-auto-scroll": "^8.6.0",
     "embla-carousel-autoplay": "^8.6.0",

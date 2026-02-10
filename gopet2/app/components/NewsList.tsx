@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { LuPlus } from "react-icons/lu";
-import axios from "axios";
 
 type Article = {
       title: string;
@@ -19,8 +18,11 @@ const NewsList = () => {
         setLoading(true);
         try {
           const response = await fetch("/api/news");
-          const data = await response.json();
-          setArticles(data.slice(0, 3));
+          const result = await response.json();
+          
+          if (result.success && Array.isArray(result.data)){
+            setArticles(result.data);
+          }
         } catch (e) {
           console.error(e);
         } finally {
