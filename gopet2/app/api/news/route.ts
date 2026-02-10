@@ -1,5 +1,4 @@
-import path from "path";
-import fs from "fs";
+import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 type Article = {
@@ -31,14 +30,20 @@ async function fetchNewsArticles(): Promise<Article[]> {
 export async function GET() {
     try {
         const data = await fetchNewsArticles();
-
-        const filePath = path.join(process.cwd(), "public", "newsapi.json");
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
-
+        const json = JSON.stringify(data, null, 2);
+        const blob = await put(
+            "newsapi.json",
+            json,
+            {
+                access: "public",
+                contentType: "application/json",
+                addRandomSuffix: false,
+            }
+        )
         return NextResponse.json({ 
             success: true, 
+            url: blob.url, // public/newsapi.json과 동일
             count: data.length, 
-            data 
         });
     } catch (err) {
         console.error(err);

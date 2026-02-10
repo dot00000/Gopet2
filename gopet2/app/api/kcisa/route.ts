@@ -1,17 +1,16 @@
+import { kv } from '@vercel/kv';
 
-let cache: any = null;
-let lastUpdated = 0;
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
 export async function GET() {
   try {
     // 캐시가 있고 하루 안 지났으면 반환
-    if (cache && Date.now() - lastUpdated < ONE_DAY) {
-      return Response.json({ 
-        success: true, 
-        count: cache.length, 
-        data: cache 
-      });
+    const cached = await kv.get('kicsa-data');
+    if(cached) {
+      return Response.json({
+        success: true,
+        data: cached
+      })
     }
 
     // 새로 API 호출
@@ -57,13 +56,10 @@ export async function GET() {
       })
       .filter(Boolean);
 
-    // 캐시 저장
-    cache = result;
-    lastUpdated = Date.now();
+    await kv.set('kcisa-data', result, { ex: ONE_DAY});
 
     return Response.json({ 
       success: true, 
-      count: result.length, 
       data: result 
     });
   } catch (err) {
