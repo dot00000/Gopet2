@@ -38,6 +38,7 @@ export async function GET() {
                 access: "public",
                 contentType: "application/json",
                 addRandomSuffix: false,
+                allowOverwrite: true
             }
         )
         return NextResponse.json({ 

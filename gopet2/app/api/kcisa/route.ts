@@ -1,16 +1,27 @@
-import { kv } from '@vercel/kv';
+import { put, head } from '@vercel/blob';
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
+const CACHE_KEY = 'kcisa-data.json';
 
 export async function GET() {
   try {
-    // 캐시가 있고 하루 안 지났으면 반환
-    const cached = await kv.get('kicsa-data');
-    if(cached) {
-      return Response.json({
-        success: true,
-        data: cached
-      })
+    // 캐시 확인
+    try {
+      const blobInfo = await head(CACHE_KEY);
+      
+      // 하루 안 지났으면 기존 데이터 반환
+      if (blobInfo && Date.now() - new Date(blobInfo.uploadedAt).getTime() < ONE_DAY) {
+        const response = await fetch(blobInfo.url);
+        const cached = await response.json();
+        
+        return Response.json({
+          success: true,
+          data: cached,
+          cached: true
+        });
+      }
+    } catch {
+      // 캐시 없음 - 새로 가져오기
     }
 
     // 새로 API 호출
@@ -56,11 +67,16 @@ export async function GET() {
       })
       .filter(Boolean);
 
-    await kv.set('kcisa-data', result, { ex: ONE_DAY});
+    // Blob에 저장
+    await put(CACHE_KEY, JSON.stringify(result), {
+      access: 'public',
+      addRandomSuffix: false, // 같은 이름으로 덮어쓰기
+    });
 
     return Response.json({ 
       success: true, 
-      data: result 
+      data: result,
+      cached: false
     });
   } catch (err) {
     console.error(err);
