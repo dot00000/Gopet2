@@ -70,7 +70,9 @@ export async function GET() {
     // Blob에 저장
     await put(CACHE_KEY, JSON.stringify(result), {
       access: 'public',
-      addRandomSuffix: false, // 같은 이름으로 덮어쓰기
+      addRandomSuffix: false,
+      contentType: 'application/json',
+      allowOverwrite: true
     });
 
     return Response.json({ 
