@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useToggleNav } from "../hooks/useToggleNav";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import NewsItem from "../components/NewsItem";
 import Header from "../components/Header";
-import { useToggleNav } from "../hooks/useToggleNav";
 
 type Article = {
       title: string;
