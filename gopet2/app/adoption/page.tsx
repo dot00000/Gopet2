@@ -11,7 +11,7 @@ import abandonData from "../assets/json/abandonanimal.json";
 const Adaoption = () => {
   const { isNavOpen, toggleNav } = useToggleNav(false);
   
-  // pagination
+  // pagination 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const pageLimit = 5;
@@ -54,7 +54,7 @@ const Adaoption = () => {
   if (error) return <div>에러 발생: {(error as Error).message}</div>;
 
   
-  // pagination 현재 데이터
+  // pagination 데이터
   const totalItems = adoptData?.length || 0; // adoptData에 날짜가 enddate가 현재 날짜랑 맞는 것까지만 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
