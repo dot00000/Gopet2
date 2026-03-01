@@ -8,8 +8,6 @@ import 'swiper/css/pagination';
 import { Keyboard, Scrollbar, Pagination, Autoplay } from 'swiper/modules';
 
 const Festival = () => {
-
-
   return (
     <>
       <section className="relative">
@@ -18,8 +16,8 @@ const Festival = () => {
           style={{ backgroundImage: `url(/images/banner5.jpg)` , height: "450px"}}
         />
         
-        <div className="relative z-10">
-          <h1 className="flex text-4xl font-bold text-white p-8">Festival</h1>
+        <div className="relative z-10 p-8">
+          <p className="flex text-3xl font-bold text-white p-6"/>
           <Swiper 
             slidesPerView={2}
             centeredSlides={false}

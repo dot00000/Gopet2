@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ( {isNavOpen, toggleNav}) => {
               height={20}
               priority
             />
-            <h1 className="ml-5 text-3xl">고 펫</h1>
+            <h1 className="ml-5 text-3xl font-bold">고 펫</h1>
           </div>
         </Link>
       </div>

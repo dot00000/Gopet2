@@ -3,7 +3,7 @@ import styles from "./NavBar.module.css";
 import Image from "next/image";
 const NavBar: React.FC = () => {
   return (
-    <nav className="flex p-4 bg-gray-100 text-center justify-evenly">
+    <nav className="flex p-4 bg-gray-100 text-center justify-evenly font-bold">
       <Link href="/hotel" className="flex-1 max-w-[210px]">
         <div className={styles.nav_box}>
           <Image src="/images/navmenu/hotel.png" alt="숙박 아이콘" width={110} height={20} className="border-10"/>

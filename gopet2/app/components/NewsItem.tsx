@@ -4,10 +4,11 @@ type Article = {
   description: string;
   url: string;
   urlToImage: string;
+  publishedAt: string;
 };
 
 const NewsItem = ({ article }: { article: Article }) => {
-  const { title, description, url, urlToImage } = article;
+  const { title, description, url, urlToImage, publishedAt } = article;
   return (
     <div className="flex flex-col justify-center items-center">
       <div

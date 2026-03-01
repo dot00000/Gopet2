@@ -3,75 +3,121 @@ import { useEffect, useState } from "react";
 import { LuPlus } from "react-icons/lu";
 
 type Article = {
-      title: string;
-      description: string;
-      url: string;
-      urlToImage: string;
-}
+  title: string;
+  description: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+};
 
 const NewsList = () => {
-  const [ articles, setArticles ] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-        setLoading(true);
-        try {
-          const response = await fetch("/api/news");
-          const result = await response.json();
-          
-          if (result.success && Array.isArray(result.data)){
-            setArticles(result.data);
-          }
-        } catch (e) {
-          console.error(e);
-        } finally {
-          setLoading(false);
+      setLoading(true);
+      try {
+        const response = await fetch("/api/news");
+        const result = await response.json();
+
+        if (result.success && Array.isArray(result.data)) {
+          setArticles(result.data);
         }
-      };
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
   }, []);
-    
-    return (
+
+  return (
     <>
-      <Link href="/petnews" className="flex text-4xl p-8 mt-5" style={{ width: "250px" }}>
-        <h1 className="flex mr-2">News</h1>
-        <LuPlus className="mt-3 text-2xl stroke-[4px]" />
+      <section className="max-w-6xl mx-auto px-6 py-2">
+      <Link
+        href="/petnews"
+        className="flex text-3xl pt-20 pb-5"
+        style={{ width: "400px" }}
+      >
+        <h1 className="flex mr-2 font-bold">Latest News</h1>
+        <img
+          src="/images/footprint.png"
+          alt=""
+          style={{ width: "40px", height: "40px" }}
+        />
       </Link>
-      <section className="flex justify-evenly items-center">
         {loading ? (
           <div>로딩중...</div>
         ) : (
-          articles.map((article, index) => (
-            <div
-              key={index}
-              className="rounded-2xl flex mb-10"
-              style={{ height: "270px", width: "500px", backgroundColor: "#f3f4f6" }}
-            >
-              {article.urlToImage && (
-                <div className="flex justify-center items-center ml-5 flex-shrink-0">
-                  <a href={article.url} target="_blank" rel="noopener noreferrer">
-                    <img
-                      style={{ width: "200px", height: "200px", objectFit: "cover", borderRadius: "10px" }}
-                      src={article.urlToImage}
-                      alt="thumbnail"
-                    />
-                  </a>
-                </div>
-              )}
-              <div className="ml-5 mr-5 flex-1">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            {articles[0] && (
+              <div className="lg:col-span-2 group cursor-pointer">
                 <a
+                  href={articles[0].url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block relative overflow-hidden rounded-2xl shadow-lg"
+                >
+                  {/* 이미지 */}
+                  <img
+                    src={articles[0].urlToImage}
+                    alt="thumbnail"
+                    className="w-full h-[450px] object-cover transition duration-500 group-hover:scale-105"
+                  />
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+
+                    <h2 className="text-2xl font-bold tracking-tight leading-snug">
+                      {articles[0].title}
+                    </h2>
+                    <p className="text-sm mb-2 opacity-80">
+                      {articles[0].publishedAt.slice(0, 10)}
+                    </p>
+
+                    <p className="mt-3 line-clamp-2 opacity-90">
+                      {articles[0].description}
+                    </p>
+                  </div>
+                </a>
+              </div>
+            )}
+
+            {/* 🗞 오른쪽 작은 뉴스 2개 */}
+            <div className="flex flex-col gap-6 justify-center">
+              {articles.slice(1, 3).map((article, index) => (
+                <a
+                  key={index}
                   href={article.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xl font-bold block mb-2 mt-8"
+                  className="w-[400px] h-[210px] flex gap-4 group cursor-pointer rounded-2xl items-center bg-white p-6 shadow-lg hover:shadow-xl transition duration-300"
+                  style={{ backgroundColor: "white", paddingLeft: "30px", paddingRight: "30px", paddingTop: "25px", paddingBottom: "25px"
+                  }}
                 >
-                  {article.title}
+                  {article.urlToImage && (
+                    <div className="w-40 h-30 overflow-hidden rounded-xl flex-shrink-0">
+                      <img
+                        src={article.urlToImage}
+                        alt="thumbnail"
+                        className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="text-lg font-semibold leading-snug" style={{ width: "180px" }}>
+                      {article.title}
+                    </h3>
+                    <h3 className="text-gray-600 mt-5 line-clamp-3">
+                      {article.publishedAt.slice(0, 10)}
+                    </h3>
+                  </div>
                 </a>
-                <p className="text-sm text-gray-600 line-clamp-7">{article.description}</p>
-              </div>
+              ))}
             </div>
-          ))
+          </div>
         )}
       </section>
     </>
