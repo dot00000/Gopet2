@@ -19,8 +19,8 @@ const NavBar: React.FC = () => {
         <Image 
           src={item.src} 
           alt={item.label} 
-          width={50} 
-          height={50} 
+          width={60} 
+          height={60} 
           className="object-contain transition-all duration-300"
         />
       </div>
