@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import PageUpButton from "./components/PageUpButton";
 import Providers from "./Providers";
@@ -11,17 +10,34 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body style={{ backgroundImage: "url('/images/gopet2_back.png')", backgroundSize: '90%',
-      backgroundPosition: 'center', backgroundRepeat: 'repeat',}}>
-        <Providers>
-          {children}
-        </Providers>
-        <PageUpButton />
+      <body
+        className="relative min-h-screen
+               bg-[url('/images/puppybackground.png')]
+               bg-cover bg-center bg-no-repeat"
+      >
+        {/* 🌿 전체 블러 오버레이 */}
+        <div className="fixed inset-0 bg-white/30 backdrop-blur-md pointer-events-none z-0" />
+
+        {/* 🌫 하단 흰색 페이드 효과 */}
+        <div
+          className="fixed bottom-0 left-0 w-full h-72
+                    bg-gradient-to-b
+                    from-transparent
+                    via-white/40
+                    to-white
+                    pointer-events-none z-0"
+        />
+
+        {/* 콘텐츠 */}
+        <div className="relative z-10">
+          <Providers>{children}</Providers>
+          <PageUpButton />
+        </div>
       </body>
     </html>
   );

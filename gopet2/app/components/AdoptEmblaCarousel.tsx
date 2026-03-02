@@ -1,40 +1,45 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
-import { EmblaOptionsType } from 'embla-carousel'
-import useEmblaCarousel from 'embla-carousel-react';
-import AutoScroll from 'embla-carousel-auto-scroll'
+import React, { useEffect, useState } from "react";
+import { EmblaOptionsType } from "embla-carousel";
+import useEmblaCarousel from "embla-carousel-react";
+import AutoScroll from "embla-carousel-auto-scroll";
 import abandonarni from "../assets/json/abandonanimal.json";
-import "./css/embla.css"
-
+import "./css/embla.css";
+import Link from "next/link";
 
 type PropType = {
-  slides: number[]
-  options?: EmblaOptionsType
-}
+  slides: number[];
+  options?: EmblaOptionsType;
+};
 
 interface SlideData {
-    state: string;
-    kg: any;
-    age: string;
-    img: any;
-    shelter: string;
-    address: string;
-    enddate: number;
+  state: string;
+  kg: any;
+  age: string;
+  img: any;
+  shelter: string;
+  address: string;
+  enddate: number;
 }
 
 const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
   const [adoptData, setAdoptData] = useState<SlideData[]>([]);
-  const { slides, options } = props
+  const { slides, options } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [
-    AutoScroll({ playOnInit: false, stopOnMouseEnter: false, stopOnInteraction: false })
-  ])
-  const [isPlaying, setIsPlaying] = useState(false)
+    AutoScroll({
+      playOnInit: false,
+      stopOnMouseEnter: false,
+      stopOnInteraction: false,
+    }),
+  ]);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    const adoptData = (abandonarni as any[]).filter((data) => data.STATE_NM === "보호중")
-    .slice(0, 10)
-    .map((data: any) => ({
+    const adoptData = (abandonarni as any[])
+      .filter((data) => data.STATE_NM === "보호중")
+      .slice(0, 8)
+      .map((data: any) => ({
         state: data.STATE_NM, // 보호중
         enddate: data.PBLANC_END_DE,
         age: data.AGE_INFO,
@@ -43,48 +48,91 @@ const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
         sex: data.SEX_NM,
         shelter: data.SLTR_NM,
         address: data.REFINE_LOTNO_ADDR,
-    }));
+      }));
     setAdoptData(adoptData);
 
-    const autoScroll = emblaApi?.plugins()?.autoScroll
-    if (!autoScroll) return
-    
-    autoScroll.play()
+    const autoScroll = emblaApi?.plugins()?.autoScroll;
+    if (!autoScroll) return;
 
-    setIsPlaying(autoScroll.isPlaying())
+    autoScroll.play();
+
+    setIsPlaying(autoScroll.isPlaying());
     emblaApi
-      .on('autoScroll:play', () => setIsPlaying(true))
-      .on('reInit', () => setIsPlaying(autoScroll.isPlaying()))
-  }, [emblaApi])
+      .on("autoScroll:play", () => setIsPlaying(true))
+      .on("reInit", () => setIsPlaying(autoScroll.isPlaying()));
+  }, [emblaApi]);
 
   return (
-      <>
-      <h1 className="text-3xl p-5 ml-4">보호소 입양</h1>
-        <div className="embla">
-          <div className="embla__viewport" ref={emblaRef}>
-            <div className="embla__container">
-              {adoptData.map((data: any, index: number) => (
-                <div className="embla__slide" key={index}>
-                  <div className="embla__slide__number">
-                    <div className='flex flex-col items-start rounded-2xl' 
-                    style={{ backgroundColor: "#f3f4f6", width: "280px", height: "300px", padding: "10px",}}>
-                        <div className='self-center rounded-2xl ml-2' 
-                        style={{ backgroundImage: `url(${data.img})`, backgroundSize: "cover", backgroundPosition: "center", width: "260px", height: "200px", borderRadius: "5px", marginRight: "5px"}}/>
-                        <div className="flex flex-col items-start text-black text-base mt-3 space-y-1 mb-2">
-                            <span>{data.state}</span>
-                            <span>{data.age} | {data.kg}</span>
-                            <span>{data.shelter}</span>
-                            <span>공고종료일 : {data.enddate}</span>
+    <>
+      <section className="relative flex flex-col items-center justify-center py-32 bg-[url('/images/puppybackground.png')] bg-cover bg-center overflow-hidden">
+        {/* 1. 배경 오버레이 (부모가 relative여야 이 안에서 꽉 찹니다) */}
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-md z-0"></div>
+
+        {/* 2. 실제 콘텐츠 (z-10과 relative를 주어 오버레이 위로 배치) */}
+        <div className="relative z-10 flex flex-col items-center w-full max-w-[1600px]">
+          <Link href="/adoption" className="flex text-3xl font-bold mb-4">
+            <h2 className="mr-3">입양을 기다리는 아이들</h2>
+            <img src="/images/footprint.png" alt="" className="w-10 h-10" />
+          </Link>
+
+          <h5 className="text-xl mb-10 text-center">
+            당신의 가족이 되어줄 친구를 만나보세요
+          </h5>
+
+          <div className="flex w-full gap-4 itmes-start">
+            {/* gap을 추가하면 간격 조절이 쉽습니다 */}
+            <div className="embla flex-1 min-w-0">
+              <div className="embla__viewport overflow-hidden" ref={emblaRef}>
+                <div className="embla__container flex">
+                  {adoptData.map((data: any, index: number) => (
+                    <div className="embla__slide flex-[240px] pr-4" key={index}>
+                      <div className="flex flex-col rounded-2xl bg-white w-full h-[340px] p-4 shadow-sm border border-gray-100">
+                        <div
+                          className="w-full h-[180px] rounded-xl bg-cover bg-center"
+                          style={{ backgroundImage: `url(${data.img})` }}
+                        />
+                        <div className="flex flex-col text-base mt-3 space-y-1">
+                          <span className="font-bold text-gray-800">
+                            {data.state}
+                          </span>
+                          <span className="text-gray-500">
+                            {data.age} | {data.kg}
+                          </span>
+                          <span className="text-gray-600">{data.shelter}</span>
+                          <span className="flex items-center justify-center text-sm text-[#477b6a] bg-[#e0e4dc] px-3 py-1 rounded-full font-medium mx-auto mt-2">
+                            공고종료일 : {data.enddate}
+                          </span>
                         </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            </div>
+            {/* 오른쪽 배너 카드 */}
+            <div className="relative flex-shrink-0 items-center justify-between rounded-3xl bg-[#f2ece7] w-[240px] h-[340px] px-8 py-6 overflow-hidden shadow-md">
+              <div className="flex flex-col z-10 mt-2">
+                <p className="text-md text-gray-600 mb-2">
+                  사랑스러운 친구들이
+                </p>
+                <h3 className="text-2xl font-bold leading-snug mb-4">
+                  당신을 <br/>기다리고 있어요!
+                </h3>
+                <Link href="/adoption" className="w-fit bg-[#477b6a] text-white px-5 py-2 rounded-full text-sm font-medium hover:opacity-90 transition">
+                보호소 입양 바로가기
+                </Link>
+              </div>
+              <img
+                className="absolute pb-5 right-6 bottom-0 w-[170px] h-auto object-contain"
+                src="/images/pats.png"
+                alt=""
+              />
             </div>
           </div>
         </div>
-      </>
-  )
-}
+      </section>
+    </>
+  );
+};
 
-export default AdoptEmblaCarousel
+export default AdoptEmblaCarousel;

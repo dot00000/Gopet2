@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { LuPlus } from "react-icons/lu";
 
 type Article = {
   title: string;
