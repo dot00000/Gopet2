@@ -40,7 +40,7 @@ const NewsList = () => {
         className="flex text-3xl pt-20 pb-5"
         style={{ width: "400px" }}
       >
-        <h1 className="flex mr-2 font-bold">Latest News</h1>
+        <h1 className="flex mr-2 font-bold">반려동물 뉴스</h1>
         <img
           src="/images/footprint.png"
           alt=""

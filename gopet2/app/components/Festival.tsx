@@ -11,13 +11,12 @@ const Festival = () => {
   return (
     <>
       <section className="relative">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-90 brightness-50"
-          style={{ backgroundImage: `url(/images/banner5.jpg)` , height: "450px"}}
-        />
-        
         <div className="relative z-10 p-8">
           <p className="flex text-3xl font-bold text-white p-6"/>
+          <div className="flex text-3xl font-bold mb-4">
+            <h2 className="mr-3">반려동물 축제</h2>
+            <img src="/images/footprint.png" alt="" className="w-10 h-10" />
+          </div>
           <Swiper 
             slidesPerView={2}
             centeredSlides={false}
@@ -41,7 +40,7 @@ const Festival = () => {
             pagination={{ clickable: true }}
             modules={[Keyboard, Scrollbar, Pagination, Autoplay]}
             className="mySwiper"
-            style={{ width: "95%", height: "320px"}}
+            style={{ width: "85%", height: "320px"}}
           >
             <SwiperSlide>
               <a href="https://ilovepets.co.kr/?main=0">

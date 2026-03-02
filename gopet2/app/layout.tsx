@@ -14,31 +14,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        className="relative min-h-screen
-               bg-[url('/images/puppybackground.png')]
-               bg-cover bg-center bg-no-repeat"
-      >
-        {/* 🌿 전체 블러 오버레이 */}
-        <div className="fixed inset-0 bg-white/30 backdrop-blur-md pointer-events-none z-0" />
+    <html lang="ko">
+  <body className="relative min-h-screen antialiased">
+    {/* 1. 배경 이미지 전용 레이어 (Fixed로 고정해서 화면 전체를 채움) */}
+    <div 
+      className="fixed inset-0 -z-20 bg-[url('/images/puppybackground.png')] bg-cover bg-center bg-no-repeat" 
+      aria-hidden="true" 
+    />
 
-        {/* 🌫 하단 흰색 페이드 효과 */}
-        <div
-          className="fixed bottom-0 left-0 w-full h-72
-                    bg-gradient-to-b
-                    from-transparent
-                    via-white/40
-                    to-white
-                    pointer-events-none z-0"
-        />
+    {/* 2. 전체적인 화이트 오버레이 + 블러 (z-index를 배경보다 높게) */}
+    <div className="fixed inset-0 -z-10 bg-white/30 backdrop-blur-md pointer-events-none" />
 
-        {/* 콘텐츠 */}
-        <div className="relative z-10">
-          <Providers>{children}</Providers>
-          <PageUpButton />
-        </div>
-      </body>
-    </html>
+    {/* 3. 하단 그라데이션 (부드러운 마무리를 위해) */}
+    <div
+      className="fixed bottom-0 left-0 w-full h-72 -z-10
+                bg-gradient-to-b from-transparent via-white/40 to-white
+                pointer-events-none"
+    />
+
+    {/* 4. 실제 콘텐츠 영역 (가장 위 레이어) */}
+    <main className="relative z-10 w-full">
+      <Providers>
+        {children}
+      </Providers>
+      <PageUpButton />
+    </main>
+  </body>
+</html>
   );
 }
