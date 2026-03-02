@@ -12,6 +12,7 @@ type Article = {
       description: string;
       url: string;
       urlToImage: string;
+      publishedAt: string;
   }
 
 export default function PetNews() {
@@ -42,9 +43,7 @@ useEffect(() => {
 }, []);
 
     if(loading) {
-        return (
-            <p>Loading...</p>
-        )
+        
     }
     if(!articles){
         return null;
