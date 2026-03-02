@@ -11,58 +11,60 @@ const Festival = () => {
   return (
     <>
       <section className="relative">
-        <div className="relative z-10 p-8">
+        <div className="relative z-10 p-2">
           <p className="flex text-3xl font-bold text-white p-6"/>
-          <div className="flex text-3xl font-bold mb-4">
-            <h2 className="mr-3">반려동물 축제</h2>
+          <div className="flex justify-center text-3xl font-bold mb-4">
+            <h2 className="mr-3 ">반려동물 축제</h2>
             <img src="/images/footprint.png" alt="" className="w-10 h-10" />
           </div>
-          <Swiper 
-            slidesPerView={2}
-            centeredSlides={false}
-            slidesPerGroupSkip={1}
-            grabCursor={true}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-            }}
-            keyboard={{
-              enabled: true,
-            }}
-            breakpoints={{
-              769: {
-                slidesPerView: 2,
-                slidesPerGroup: 2,
-              }
-            }}
-            scrollbar={false}
-            navigation={false}
-            pagination={{ clickable: true }}
-            modules={[Keyboard, Scrollbar, Pagination, Autoplay]}
-            className="mySwiper"
-            style={{ width: "85%", height: "320px"}}
-          >
-            <SwiperSlide>
-              <a href="https://ilovepets.co.kr/?main=0">
-                <img className="rounded-2xl ml-10 mr-10" style={{ width: "90%", height: "280px" }} src="/images/festival/petandmore.png" alt="" />
-              </a>
-            </SwiperSlide>
-            <SwiperSlide>
-              <a href="https://www.pet-show.co.kr/#__890105__item1">
-                <img className="rounded-2xl ml-10" style={{ width: "90%", height: "280px"}} src="/images/festival/petshow.jpg" alt="" />
-              </a>
-            </SwiperSlide>
-            <SwiperSlide>
-              <a href="https://www.mypetfair.co.kr/">
-                <img className="rounded-2xl ml-10" style={{ width: "90%", height: "280px"}} src="/images/festival/songdo.jpg" alt="" />
-              </a>
-            </SwiperSlide>
-            <SwiperSlide>
-              <a href="https://cat-show.co.kr/">
-                <img className="rounded-2xl ml-10" style={{ width: "90%", height: "280px"}} src="/images/festival/nnpunch.png" alt="" />
-              </a>
-            </SwiperSlide>
-          </Swiper>
+          <div className="pt-10 bg-white/70 shadow-lg backdrop-blur-md rounded-2xl border border-white/50 mx-auto w-[75%]">
+            <Swiper  
+              slidesPerView={2}
+              centeredSlides={false}
+              slidesPerGroupSkip={1}
+              grabCursor={true}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              keyboard={{
+                enabled: true,
+              }}
+              breakpoints={{
+                769: {
+                  slidesPerView: 2,
+                  slidesPerGroup: 2,
+                }
+              }}
+              scrollbar={false}
+              navigation={false}
+              pagination={{ clickable: true }}
+              modules={[Keyboard, Scrollbar, Pagination, Autoplay]}
+              className="mySwiper"
+              style={{ width: "95%", height: "320px"}}
+            >
+              <SwiperSlide>
+                <a href="https://ilovepets.co.kr/?main=0">
+                  <img className="rounded-2xl ml-10 mr-10" style={{ width: "90%", height: "260px" }} src="/images/festival/petandmore.png" alt="" />
+                </a>
+              </SwiperSlide>
+              <SwiperSlide>
+                <a href="https://www.pet-show.co.kr/#__890105__item1">
+                  <img className="rounded-2xl ml-10" style={{ width: "90%", height: "260px"}} src="/images/festival/petshow.jpg" alt="" />
+                </a>
+              </SwiperSlide>
+              <SwiperSlide>
+                <a href="https://www.mypetfair.co.kr/">
+                  <img className="rounded-2xl ml-10" style={{ width: "90%", height: "260px"}} src="/images/festival/songdo.jpg" alt="" />
+                </a>
+              </SwiperSlide>
+              <SwiperSlide>
+                <a href="https://cat-show.co.kr/">
+                  <img className="rounded-2xl ml-10" style={{ width: "90%", height: "260px"}} src="/images/festival/nnpunch.png" alt="" />
+                </a>
+              </SwiperSlide>
+            </Swiper>
+          </div>
         </div>
       </section>
     </>

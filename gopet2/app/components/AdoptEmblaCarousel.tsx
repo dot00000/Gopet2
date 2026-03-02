@@ -64,10 +64,8 @@ const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
 
   return (
     <>
-      <section className="relative flex flex-col items-center justify-center py-32 overflow-hidden">
-        {/* 1. 배경 오버레이 (부모가 relative여야 이 안에서 꽉 찹니다) */}
-
-        {/* 2. 실제 콘텐츠 (z-10과 relative를 주어 오버레이 위로 배치) */}
+      <section className="relative flex flex-col items-center justify-center py-24 overflow-hidden">
+        
         <div className="relative z-10 flex flex-col items-center w-full max-w-[1600px]">
           <Link href="/adoption" className="flex text-3xl font-bold mb-4">
             <h2 className="mr-3">입양을 기다리는 아이들</h2>
@@ -77,7 +75,6 @@ const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
           <h5 className="text-xl mb-10 text-center">당신의 가족이 되어줄 친구들을 만나보세요</h5>
 
           <div className="flex w-full gap-4 itmes-start">
-            {/* gap을 추가하면 간격 조절이 쉽습니다 */}
             <div className="embla flex-1 min-w-0">
               <div className="embla__viewport overflow-hidden" ref={emblaRef}>
                 <div className="embla__container flex">

@@ -34,19 +34,19 @@ const NewsList = () => {
 
   return (
     <>
-      <section className="max-w-6xl mx-auto px-6 py-2">
-      <Link
-        href="/petnews"
-        className="flex text-3xl pt-20 pb-5"
-        style={{ width: "400px" }}
-      >
-        <h1 className="flex mr-2 font-bold">반려동물 뉴스</h1>
-        <img
-          src="/images/footprint.png"
-          alt=""
-          style={{ width: "40px", height: "40px" }}
-        />
-      </Link>
+      <section className="max-w-6xl mx-auto px-6 py-4">
+        <Link
+          href="/petnews"
+          className="flex items-center justify-center mx-auto text-3xl pt-10 pb-5"
+          style={{ width: "400px" }}
+        >
+          <h1 className="font-bold mr-2 py-5">반려동물 뉴스</h1>
+          <img
+            src="/images/footprint.png"
+            alt=""
+            style={{ width: "40px", height: "40px" }}
+          />
+        </Link>
         {loading ? (
           <div>로딩중...</div>
         ) : (
@@ -68,7 +68,6 @@ const NewsList = () => {
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-
                     <h2 className="text-2xl font-bold tracking-tight leading-snug">
                       {articles[0].title}
                     </h2>
@@ -93,7 +92,12 @@ const NewsList = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-[400px] h-[210px] flex gap-4 group cursor-pointer rounded-2xl items-center bg-white p-6 shadow-lg hover:shadow-xl transition duration-300"
-                  style={{ backgroundColor: "white", paddingLeft: "30px", paddingRight: "30px", paddingTop: "25px", paddingBottom: "25px"
+                  style={{
+                    backgroundColor: "white",
+                    paddingLeft: "30px",
+                    paddingRight: "30px",
+                    paddingTop: "25px",
+                    paddingBottom: "25px",
                   }}
                 >
                   {article.urlToImage && (
@@ -106,7 +110,10 @@ const NewsList = () => {
                     </div>
                   )}
                   <div>
-                    <h3 className="text-lg font-semibold leading-snug" style={{ width: "180px" }}>
+                    <h3
+                      className="text-lg font-semibold leading-snug"
+                      style={{ width: "180px" }}
+                    >
                       {article.title}
                     </h3>
                     <h3 className="text-gray-600 mt-5 line-clamp-3">
