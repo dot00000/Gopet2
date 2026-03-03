@@ -13,7 +13,7 @@ const NewsItem = ({ article }: { article: Article }) => {
     <div className="flex flex-col justify-center items-center">
       <div
         className="flex justify-center items-center bg-gray-300 mb-1 rounded-3xl mb-10"
-        style={{ width: "70%", height: "250px", backgroundColor: "#f3f4f6"}}
+        style={{ width: "70%", height: "250px", backgroundColor: "#ffffff"}}
       >
         {urlToImage && (
           <div className="flex justify-center items-center ml-5">
@@ -23,11 +23,11 @@ const NewsItem = ({ article }: { article: Article }) => {
           </div>
         )}
         <div className="mr-10">
-          <a
+          <a 
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-2xl ml-10 mb-10"
+            className="text-2xl ml-10 mb-10 font-bold"
           >
             {title}
           </a>

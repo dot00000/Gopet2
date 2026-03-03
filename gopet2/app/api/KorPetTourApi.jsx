@@ -1,13 +1,27 @@
-const KorPetTourApi = async(category) => {
-    const apiKey = `http://apis.data.go.kr/B551011/KorPetTourService/areaBasedList?ServiceKey=${process.env.NEXT_PUBLIC_KOR_PET_TOUR_SERVICE}&MobileOS=ETC&MobileApp=AppTest&_type=json`
+const KorPetTourApi = async(contentId) => {
+    
+    const apiUrl = `https://apis.data.go.kr/B551011/KorPetTourService2/detailIntro2?ServiceKey=${process.env.NEXT_PUBLIC_KOR_PET_TOUR_SERVICE}&MobileOS=ETC&MobileApp=AppTest&_type=json&contentId=${contentId}&contentTypeId=32`;
     try {
-        const response = await fetch(apiKey, {
+        const response = await fetch(apiUrl, {
             headers: {
                 Accept: "application/json",
             },
         })
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
+        console.log(data);
         const items = data.response?.body?.items?.item || [];
+        if (!items.length) return null;
+        console.log(data.response.body.totalCount);
+        console.log("contentId:", contentId);
+        console.log("apiUrl", apiUrl);
+        
+        
+        return items[0];
+        
+        
         const result = items
         .map((item) => {
             const address = item.addr1;

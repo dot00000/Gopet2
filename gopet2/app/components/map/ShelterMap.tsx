@@ -160,7 +160,7 @@ export default function ShelterMap({ mapId = "map" }) {
         />
         {modalData && <div className="modal">{modalData.title}</div>}
         <button
-          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${
+          className={`font-bold flex justify-center items-center px-4 py-2 rounded-2xl transition ${
             currentOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"
           }`}
           onClick={handleCurrentLocation}
@@ -169,7 +169,7 @@ export default function ShelterMap({ mapId = "map" }) {
           {currentOpen ? "현재위치" : "현재위치"}
         </button>
         <button
-          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${
+          className={`font-bold flex justify-center items-center px-4 py-2 rounded-2xl transition ${
             refresh ? "bg-blue-800 text-white" : "bg-white/60 text-black"
           }`}
           onClick={handleRefreshLocation}
@@ -181,7 +181,7 @@ export default function ShelterMap({ mapId = "map" }) {
           새로고침
         </button>
         <button
-          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition
+          className={`font-bold flex justify-center items-center px-4 py-2 rounded-2xl transition
             ${isOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"}`}
           onClick={handleShelterLocation}
           style={{ position: "absolute", top: 10, left: "60%", zIndex: 999 }}

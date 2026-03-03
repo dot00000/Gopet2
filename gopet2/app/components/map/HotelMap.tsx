@@ -160,7 +160,7 @@ export default function HotelMap({
         {modalData && <div className="modal">{modalData.title}</div>}
 
         <button
-          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${
+          className={`flex font-bold justify-center items-center px-4 py-2 rounded-4xl transition ${
             currentOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"
           }`}
           onClick={handleCurrentLocation}
@@ -169,7 +169,7 @@ export default function HotelMap({
           {currentOpen ? "현재위치" : "현재위치"}
         </button>
         <button
-          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition ${
+          className={`flex font-bold justify-center items-center px-4 py-2 rounded-4xl transition ${
             refresh ? "bg-blue-800 text-white" : "bg-white/60 text-black"
           }`}
           onClick={handleRefreshLocation}
@@ -181,7 +181,7 @@ export default function HotelMap({
           새로고침
         </button>
         <button
-          className={`flex justify-center items-center px-4 py-2 rounded-2xl transition
+          className={`flex font-bold justify-center items-center px-4 py-2 rounded-4xl transition
             ${isOpen ? "bg-blue-800 text-white" : "bg-white/60 text-black"}`}
           onClick={handleHotelLocation}
           style={{ position: "absolute", top: 10, left: "60%", zIndex: 999 }}

@@ -37,10 +37,10 @@ const NewsList = () => {
       <section className="max-w-6xl mx-auto px-6 py-4">
         <Link
           href="/petnews"
-          className="flex items-center justify-center mx-auto text-3xl pt-10 pb-5"
+          className="flex items-center justify-center mx-auto text-3xl pb-5"
           style={{ width: "400px" }}
         >
-          <h1 className="font-bold mr-2 py-5">반려동물 뉴스</h1>
+          <h1 className="font-bold mr-2 py-10">반려동물 뉴스</h1>
           <img
             src="/images/footprint.png"
             alt=""

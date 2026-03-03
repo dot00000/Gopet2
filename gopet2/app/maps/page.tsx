@@ -157,8 +157,8 @@ export default function Maps() {
             {modalData && "tel" in modalData && (
               <>
                 <div
-                  className="bg-white justify-center items-center rounded-2xl p-4 mt-10"
-                  style={{ width: "400px", minHeight: "200px" }}
+                  className="bg-white justify-center items-center rounded-2xl p-4 mt-10 break-all"
+                  style={{ maxWidth: "400px", minHeight: "200px" }}
                 >
                   <p className="flex justify-center items-center text-xl font-bold m-2">
                     {modalData.title}
@@ -212,9 +212,9 @@ export default function Maps() {
       content: (
         <>
           <hr className="border-t border-gray-300 my-4" />
-          <div className="flex justify-center gap-3">
-            <div className="flex rounded-2xl text-xl py-2 mb-5 px-3 bg-blue-500 text-white">
-              <GiPositionMarker className="text-3xl mr-2" /> 지 역
+          <div className="flex text-lg font-bold justify-center gap-3">
+            <div className="flex rounded-4xl text-lg py-2 mb-5 px-3 bg-[#111828] text-white">
+              <GiPositionMarker className="text-3xl mr-1" /> 지 역
             </div>
             <select
               value={selectSido}
@@ -223,7 +223,7 @@ export default function Maps() {
                 setSelectSido(newSido);
                 setSelectSigungu("");
               }}
-              className={"px-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"}
+              className={"px-3 mb-5 bg-white rounded-4xl hover:bg-gray-200"}
             >
               <option value="">시/도 선택</option>
               {Object.keys(regionData).map((si) => (
@@ -235,7 +235,7 @@ export default function Maps() {
             <select
               value={selectSigungu}
               onChange={(e) => setSelectSigungu(e.target.value)}
-              className="px-3 py-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"
+              className="px-3 py-3 mb-5 bg-white rounded-4xl hover:bg-gray-200"
             >
               <option value="">시/군/구</option>
               {selectSido &&
@@ -255,7 +255,7 @@ export default function Maps() {
                 });
                 setCurrentPage(1); // 리셋
               }}
-              className="flex rounded-2xl text-xl py-2 mb-5 px-4 bg-blue-500 text-white cursor-pointer"
+              className="flex rounded-4xl text-lg py-2 mb-5 px-4 bg-[#111828] text-white cursor-pointer"
             >
               검색
             </button>
@@ -345,9 +345,9 @@ export default function Maps() {
       content: (
         <>
           <hr className="border-t border-gray-300 my-4" />
-          <div className="flex justify-center gap-3">
-            <div className="flex rounded-2xl text-xl py-2 mb-5 px-3 bg-blue-500 text-white">
-              <GiPositionMarker className="text-3xl mr-2" /> 지 역
+          <div className="flex font-bold justify-center gap-3">
+            <div className="flex rounded-4xl text-lg py-2 mb-5 px-3 bg-[#111828] text-white">
+              <GiPositionMarker className="text-3xl mr-1" /> 지 역
             </div>
             <select
               value={selectSido}
@@ -356,7 +356,7 @@ export default function Maps() {
                 setSelectSido(newSido);
                 setSelectSigungu("");
               }}
-              className={"px-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"}
+              className={"px-3 mb-5 bg-white rounded-4xl hover:bg-gray-200"}
             >
               <option value="">시/도 선택</option>
               {Object.keys(regionData).map((si) => (
@@ -368,7 +368,7 @@ export default function Maps() {
             <select
               value={selectSigungu}
               onChange={(e) => setSelectSigungu(e.target.value)}
-              className="px-3 py-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"
+              className="px-3 py-3 mb-5 bg-white rounded-4xl hover:bg-gray-200"
             >
               <option value="">시/군/구</option>
               {selectSido &&
@@ -388,7 +388,7 @@ export default function Maps() {
                 });
                 setCurrentPage(1); // 리셋
               }}
-              className="flex rounded-2xl text-xl py-2 mb-5 px-4 bg-blue-500 text-white cursor-pointer"
+              className="flex rounded-4xl text-lg py-2 mb-5 px-4 bg-[#111828] text-white cursor-pointer"
             >
               검색
             </button>
@@ -478,9 +478,9 @@ export default function Maps() {
       content: (
         <>
           <hr className="border-t border-gray-300 my-4" />
-          <div className="flex justify-center gap-3">
-            <div className="flex rounded-2xl text-xl py-2 mb-5 px-3 bg-blue-500 text-white">
-              <GiPositionMarker className="text-3xl mr-2" /> 지 역
+          <div className="flex font-bold justify-center gap-3">
+            <div className="flex rounded-4xl text-lg py-2 mb-5 px-3 bg-[#111828] text-white">
+              <GiPositionMarker className="text-3xl mr-1" /> 지 역
             </div>
             <select
               value={selectSido}
@@ -489,7 +489,7 @@ export default function Maps() {
                 setSelectSido(newSido);
                 setSelectSigungu("");
               }}
-              className={"px-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"}
+              className={"px-3 mb-5 bg-white rounded-4xl hover:bg-gray-200"}
             >
               <option value="">시/도 선택</option>
               {Object.keys(regionData).map((si) => (
@@ -501,7 +501,7 @@ export default function Maps() {
             <select
               value={selectSigungu}
               onChange={(e) => setSelectSigungu(e.target.value)}
-              className="px-3 py-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"
+              className="px-3 py-3 mb-5 bg-white rounded-4xl hover:bg-gray-200"
             >
               <option value="">시/군/구</option>
               {selectSido &&
@@ -521,7 +521,7 @@ export default function Maps() {
                 });
                 setCurrentPage(1); // 리셋
               }}
-              className="flex rounded-2xl text-xl py-2 mb-5 px-4 bg-blue-500 text-white cursor-pointer"
+              className="flex rounded-4xl text-lg py-2 mb-5 px-4 bg-[#111828] text-white cursor-pointer"
             >
               검색
             </button>
@@ -616,9 +616,9 @@ export default function Maps() {
       content: (
         <>
           <hr className="border-t border-gray-300 my-4" />
-          <div className="flex justify-center gap-3">
-            <div className="flex rounded-2xl text-xl py-2 mb-5 px-3 bg-blue-500 text-white">
-              <GiPositionMarker className="text-3xl mr-2" /> 지 역
+          <div className="flex font-bold justify-center gap-3">
+            <div className="flex rounded-4xl text-lg py-2 mb-5 px-3 bg-[#111828] text-white">
+              <GiPositionMarker className="text-3xl mr-1" /> 지 역
             </div>
             <select
               value={selectSido}
@@ -627,7 +627,7 @@ export default function Maps() {
                 setSelectSido(newSido);
                 setSelectSigungu("");
               }}
-              className={"px-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"}
+              className={"px-3 mb-5 bg-white rounded-4xl hover:bg-gray-200"}
             >
               <option value="">시/도 선택</option>
               {Object.keys(regionData).map((si) => (
@@ -639,7 +639,7 @@ export default function Maps() {
             <select
               value={selectSigungu}
               onChange={(e) => setSelectSigungu(e.target.value)}
-              className="px-3 py-3 mb-5 bg-white rounded-2xl hover:bg-gray-200"
+              className="px-3 py-3 mb-5 bg-white rounded-4xl hover:bg-gray-200"
             >
               <option value="">시/군/구</option>
               {selectSido &&
@@ -659,7 +659,7 @@ export default function Maps() {
                 });
                 setCurrentPage(1); // 리셋
               }}
-              className="flex rounded-2xl text-xl py-2 mb-5 px-4 bg-blue-500 text-white cursor-pointer"
+              className="flex rounded-4xl text-lg py-2 mb-5 px-4 bg-[#111828] text-white cursor-pointer"
             >
               검색
             </button>
@@ -758,12 +758,12 @@ export default function Maps() {
             <div className="swiper relative">
               <div className="swiper-wrapper">
                 <div className="swiper-slide menu h-full">
-                  <ul className="flex justify-start items-center py-5">
+                  <ul className="flex font-bold justify-start items-center mt-3 ml-3 p-0">
                     {tabs.map((tab) => (
                       <li
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex space-x-2 w3-bar-item w3-button ml-5 py-2 px-3 text-xl bg-white rounded-2xl hover:bg-gray-200 
+                        className={`flex space-x-2 w3-bar-item w3-button ml-5 py-2 px-3 text-lg bg-white rounded-4xl hover:bg-gray-200 
                   ${activeTab === tab.id ? "active bg-gray-300" : ""}`}
                       >
                         {tab.name}
@@ -781,7 +781,7 @@ export default function Maps() {
                   {/* 메뉴 버튼 영역 */}
                   <div>
                     <div
-                      className={`menu-button ${open ? "cross" : ""}`}
+                      className={`menu-button rounded-xl ${open ? "cross" : ""}`}
                       onClick={toggleMenu}
                     >
                       <span className="bar" />

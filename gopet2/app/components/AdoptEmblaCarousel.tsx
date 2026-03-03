@@ -64,7 +64,7 @@ const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
 
   return (
     <>
-      <section className="relative flex flex-col items-center justify-center py-24 overflow-hidden">
+      <section className="relative flex flex-col items-center justify-center py-15 overflow-hidden">
         
         <div className="relative z-10 flex flex-col items-center w-full max-w-[1600px]">
           <Link href="/adoption" className="flex text-3xl font-bold mb-4">

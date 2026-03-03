@@ -109,7 +109,9 @@ export default function Shelter() {
                     <span className="text-2xl">
                       <AiOutlineEnvironment />
                     </span>
-                    <span className="ml-2 mb-2 text-base">{modalData.address}</span>
+                    <span className="ml-2 mb-2 text-base">
+                      {modalData.address}
+                    </span>
                   </div>
                   <div className="flex">
                     <span className="text-2xl">
@@ -208,12 +210,12 @@ export default function Shelter() {
             <div className="swiper relative">
               <div className="swiper-wrapper">
                 <div className="swiper-slide menu h-full">
-                  <ul className="flex justify-start items-center py-5">
+                  <ul className="flex justify-start items-center mt-3 ml-3 p-0">
                     {tabs.map((tab) => (
                       <li
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex space-x-2 w3-bar-item w3-button ml-5 py-2 px-3 text-xl bg-white rounded-2xl hover:bg-gray-200 
+                        className={`font-bold flex space-x-2 w3-bar-item w3-button ml-5 py-2 px-3 text-lg bg-white rounded-2xl hover:bg-gray-200 
                   ${activeTab === tab.id ? "active bg-gray-300" : ""}`}
                       >
                         {tab.name}
@@ -231,7 +233,7 @@ export default function Shelter() {
                   {/* 메뉴 버튼 영역 */}
                   <div>
                     <div
-                      className={`menu-button ${open ? "cross" : ""}`}
+                      className={`menu-button rounded-lg ${open ? "cross" : ""}`}
                       onClick={toggleMenu}
                     >
                       <span className="bar" />
