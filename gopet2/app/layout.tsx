@@ -15,28 +15,25 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-  <body className="relative min-h-screen antialiased">
-    
-    <div 
-      className="fixed inset-0 -z-20 bg-[url('/images/puppybackground.png')] bg-cover bg-center bg-no-repeat" 
-      aria-hidden="true" 
-    />
+      <body className="relative min-h-screen antialiased">
+        <div
+          className="fixed inset-0 -z-20 bg-[url('/images/puppybackground.png')] bg-cover bg-center bg-no-repeat"
+          aria-hidden="true"
+        />
 
-    <div className="fixed inset-0 -z-10 bg-white/30 backdrop-blur-md pointer-events-none" />
+        <div className="fixed inset-0 -z-10 bg-white/30 backdrop-blur-md pointer-events-none" />
 
-    <div
-      className="fixed bottom-0 left-0 w-full h-72 -z-10
+        <div
+          className="fixed bottom-0 left-0 w-full h-72 -z-10
                 bg-gradient-to-b from-transparent via-white/40 to-white
                 pointer-events-none"
-    />
+        />
 
-    <main className="relative z-10 w-full">
-      <Providers>
-        {children}
-      </Providers>
-      <PageUpButton />
-    </main>
-  </body>
-</html>
+        <main className="relative z-10 w-full">
+          <Providers>{children}</Providers>
+          <PageUpButton />
+        </main>
+      </body>
+    </html>
   );
 }

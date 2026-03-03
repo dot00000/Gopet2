@@ -12,7 +12,7 @@ import shelter from "../assets/json/shelter.json";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swiper from "swiper";
-import ShelterMap from "../components/map/ShelterMap";
+import ShelterMap from "../components/marker/ShelterMarker";
 import "swiper/css";
 
 export default function Shelter() {

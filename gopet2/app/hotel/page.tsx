@@ -11,7 +11,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { useModalStore } from "../hooks/useModalStore";
 import { HotelData } from "../hooks/useModalStore";
 import { selectRegion } from "../hooks/useRegion";
-import HotelMap from "../components/map/HotelMap";
+import HotelMap from "../components/marker/HotelMarker";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swiper from "swiper";

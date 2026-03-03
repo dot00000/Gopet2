@@ -10,7 +10,7 @@ import { CafeData, FoodData, HospitalData, ParkData, useModalStore } from "../ho
 import { selectRegion } from "../hooks/useRegion";
 import { CgWebsite } from "react-icons/cg";
 import { LuPhone } from "react-icons/lu";
-import TotalMap from "../components/map/TotalMap";
+import TotalMap from "../components/marker/AllMarker";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swiper from "swiper";
