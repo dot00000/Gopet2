@@ -37,10 +37,6 @@ const Adoption = () => {
       try {
         const res = await fetch('/api/animals');
         const data = await res.json();
-        console.log(data);
-        console.log(data.data);
-        
-        
         const filtered = (data.data || [])
           .filter((item: any) => {
             const protecting = item.state === "보호중";
