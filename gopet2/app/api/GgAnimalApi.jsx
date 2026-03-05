@@ -1,32 +1,52 @@
-import { useEffect } from 'react';
-import { xml2json } from 'xml-js';
-const GgAnimalApi = async() => {
-    const gganimal = `https://openapi.gg.go.kr/AbdmAnimalProtect?`
-    try {
+// "use client"
+// import { useEffect, useState } from 'react';
+// import { xml2json } from 'xml-js';
 
-        const response = await fetch(gganimal);
-        const textData = await response.text();
+// const GgAnimalApi = () => {  // async 제거
+//     const [items, setItems] = useState([]);
+//     const [loading, setLoading] = useState(true);
 
-        // xml데이터를 Json으로 변환
-        const jsonData = JSON.parse(xml2json(textData, {compact: true, spaces: 2}));
-        // 변환된 JSON 데이터에서 리스트 항목 추출
-        const extracteditmes = jsonData.schoolinfo?.row;
-        setItems(extracteditmes);
-        setLoading(false);
-    }catch (err) {
-        setError('Failed to fetch or parse data');
-        setLoading(false);
-    }
-    useEffect(() => {
-        return () => {
-            fetchXmlData();
-        }
-    },[]);
-    
-    return (
-        <>
-        </>
-    )
-}
+//     useEffect(() => {
+//         const fetchData = async () => {
+//             const gganimal = `https://openapi.gg.go.kr/AbdmAnimalProtect?KEY=${process.env.NEXT_PUBLIC_GG_API_KEY}`;
+//             try {
+//                 const response = await fetch(gganimal);
+//                 const textData = await response.text();
+//                 const jsonData = JSON.parse(xml2json(textData, { compact: true, spaces: 2 }));
+//                 const extractedItems = jsonData.AbdmAnimalProtect?.row;
 
-export default GgAnimalApi;
+//                 const items = jsonData.response?.body?.items?.item || [];
+//                 const result = items.map((item) => {
+//                     const identify = item.PBLANC_IDNTFY_NO;
+//                     const state = item.STATE_NM;
+//                     const image = item.IMAGE_COURS;
+//                     const weight = item.BDWGH_INFO;
+//                     const age = item.AGE_INFO;
+//                     const begindate = item.PBLANC_BEGIN_DE;
+//                     const enddate = item.PBLANC_END_DE;
+//                     const sex = item.SEX_NM;
+//                     const lat = item.REFINE_WGS84_LAT;
+//                     const lng = item.REFINE_WGS84_LOGT;
+//                     const tel = item.SHTER_TELNO;
+//                     const shelter = item.SHTER_NM;
+
+//                     return {
+//                         identify, state, image, weight, age, begindate, enddate, sex, lat, lng, tel, shelter
+//                     }
+//                 })
+                
+//                 setItems(extractedItems);
+//                 setLoading(false);
+//                 console.log(result);
+//                 return result;
+//             } catch (error) {
+//                 console.error(error);
+//                 setLoading(false);
+//             }
+//         };
+//         fetchData();
+//     }, []);
+
+// }
+
+// export default GgAnimalApi;

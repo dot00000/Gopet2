@@ -1,64 +1,82 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { useToggleNav } from "../hooks/useToggleNav";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import Header from "../components/Header";
-import abandonData from "../assets/json/abandonanimal.json";
 
-const Adaoption = () => {
+export interface AnimalData {
+    identify: string;
+    state: string;
+    image: string;
+    weight: string;
+    age: string;
+    begindate: string;
+    enddate: string;
+    sex: string;
+    lat: number;
+    long: number;
+    tel: string;
+    shelter: string;
+}
+
+const Adoption = () => {
   const { isNavOpen, toggleNav } = useToggleNav(false);
-  
-  // pagination 
+  const [animalData, setAnimalData] = useState<AnimalData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const pageLimit = 5;
   const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
 
-  const {
-    data: adoptData,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["abandonani"], // 키값으로 데이터 캐싱
-    queryFn: () => {
-      return abandonData as any[];
-    },
-    staleTime: Infinity,
-    select: (data) => {
-      return data
-        .filter((item) => {
-          const protecting = item.STATE_NM === "보호중";
-          const notExpired = String(item.PBLANC_END_DE) >= today;
-          return protecting && notExpired;
-        })
-
-        .map((data) => ({
-          number: data.PBLANC_IDNTFY_ID,
-          state: data.STATE_NM, // 보호중
-          begindate: data.PBLANC_BEGIN_DE,
-          enddate: data.PBLANC_END_DE,
-          age: data.AGE_INFO,
-          kg: data.BDWGH_INFO,
-          sex: data.SEX_NM,
-          shelter: data.SLTR_NM,
-          img: data.IMAGE_COURS,
-          tel: data.SLTR_TELNO,
-        }));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch('/api/animals');
+        const data = await res.json();
+        console.log(data);
+        console.log(data.data);
         
-    },
-  });
-  if (isLoading) return <div>데이터를 불러오는 중...</div>;
-  if (error) return <div>에러 발생: {(error as Error).message}</div>;
+        
+        const filtered = (data.data || [])
+          .filter((item: any) => {
+            const protecting = item.state === "보호중";
+            const notExpired = String(item.enddate) >= today;
+            return protecting && notExpired;
+          })
+          .map((item: any) => ({
+            number: item.number,
+            state: item.state,
+            begindate: item.begindate,
+            enddate: item.enddate,
+            age: item.age,
+            kg: item.weight,
+            sex: item.sex,
+            shelter: item.shelter,
+            img: item.image,
+            tel: item.tel,
+          }));
 
+        setAnimalData(filtered);
+      } catch (e) {
+        console.error(e);
+        setAnimalData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
   
+
   // pagination 데이터
-  const totalItems = adoptData?.length || 0; // adoptData에 날짜가 enddate가 현재 날짜랑 맞는 것까지만 
+  const totalItems = animalData?.length || 0; 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = adoptData?.slice(startIndex, startIndex + itemsPerPage);
+  const currentItems = animalData?.slice(startIndex, startIndex + itemsPerPage);
 
   // 페이지 그룹
   const currentPageGroup = Math.floor((currentPage - 1) / pageLimit);
@@ -151,4 +169,4 @@ const Adaoption = () => {
   );
 };
 
-export default Adaoption;
+export default Adoption;
