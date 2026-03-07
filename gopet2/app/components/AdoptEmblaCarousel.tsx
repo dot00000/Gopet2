@@ -41,18 +41,18 @@ const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
         const data = await res.json();
         const filtered = (data.data || [])
           .filter((item: any) => {
-            const protecting = item.state === "보호중";
-            const notExpired = String(item.enddate) >= today;
+            const protecting = item.STATE_NM._text === "보호중";
+            const notExpired = String(item.PBLANC_END_DE) >= today;
             return protecting && notExpired;
           })
           .slice(0, 8)
           .map((item: any) => ({
-            state: item.state, // 보호중
-            enddate: item.enddate,
-            age: item.age,
-            kg: item.weight,
-            img: item.image,
-            shelter: item.shelter,
+            state: item.STATE_NM?._text,
+            enddate: item.PBLANC_END_DE?._text,
+            age: item.AGE_INFO?._text,
+            kg: item.BDWGH_INFO?._text,
+            img: item.IMAGE_COURS?._text,
+            shelter: item.SHTER_NM?._text,
           }));
         setAdoptData(filtered);
       } catch (e) {

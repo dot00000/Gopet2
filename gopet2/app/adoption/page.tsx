@@ -7,18 +7,18 @@ import { IoIosArrowForward } from "react-icons/io";
 import Header from "../components/Header";
 
 export interface AnimalData {
-    identify: string;
-    state: string;
-    image: string;
-    weight: string;
-    age: string;
-    begindate: string;
-    enddate: string;
-    sex: string;
-    lat: number;
-    long: number;
-    tel: string;
-    shelter: string;
+  identify: string;
+  state: string;
+  image: string;
+  weight: string;
+  age: string;
+  begindate: string;
+  enddate: string;
+  sex: string;
+  lat: number;
+  long: number;
+  tel: string;
+  shelter: string;
 }
 
 const Adoption = () => {
@@ -30,32 +30,33 @@ const Adoption = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const pageLimit = 5;
-  const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
+  const today = new Date().toISOString().split("T")[0].replace(/-/g, "");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('/api/animals');
+        const res = await fetch("/api/animals");
         const data = await res.json();
         const filtered = (data.data || [])
           .filter((item: any) => {
-            const protecting = item.state === "보호중";
-            const notExpired = String(item.enddate) >= today;
+            const protecting = item.STATE_NM._text === "보호중";
+            const notExpired = String(item.PBLANC_END_DE) >= today;
             return protecting && notExpired;
           })
           .map((item: any) => ({
-            number: item.number,
-            state: item.state,
-            begindate: item.begindate,
-            enddate: item.enddate,
-            age: item.age,
-            kg: item.weight,
-            sex: item.sex,
-            shelter: item.shelter,
-            img: item.image,
-            tel: item.tel,
+            number: item.PBLANC_IDNTFY_NO?._text,
+            state: item.STATE_NM?._text,
+            img: item.IMAGE_COURS?._text,
+            kg: item.BDWGH_INFO?._text,
+            age: item.AGE_INFO?._text,
+            begindate: item.PBLANC_BEGIN_DE?._text,
+            enddate: item.PBLANC_END_DE?._text,
+            sex: item.SEX_NM?._text,
+            lat: parseFloat(item.REFINE_WGS84_LAT?._text),
+            lng: parseFloat(item.REFINE_WGS84_LOGT?._text),
+            tel: item.SHTER_TELNO?._text,
+            shelter: item.SHTER_NM?._text,
           }));
-
         setAnimalData(filtered);
       } catch (e) {
         console.error(e);
@@ -66,10 +67,9 @@ const Adoption = () => {
     };
     fetchData();
   }, []);
-  
 
   // pagination 데이터
-  const totalItems = animalData?.length || 0; 
+  const totalItems = animalData?.length || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = animalData?.slice(startIndex, startIndex + itemsPerPage);
@@ -78,13 +78,18 @@ const Adoption = () => {
   const currentPageGroup = Math.floor((currentPage - 1) / pageLimit);
   const startPage = currentPageGroup * pageLimit + 1;
   const endPage = Math.min(startPage + pageLimit - 1, totalPages);
-  const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  const pageNumbers = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, i) => startPage + i,
+  );
 
   return (
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
-      <h1 className="flex justify-center text-3xl mb-10 mt-10 font-bold">💗 보호소 입양</h1>
-      
+      <h1 className="flex justify-center text-3xl mb-10 mt-10 font-bold">
+        💗 보호소 입양
+      </h1>
+
       {/* 카드 리스트 섹션 */}
       <section className="flex justify-center items-start min-h-[700px]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 w-full max-w-7xl px-10">
@@ -96,8 +101,12 @@ const Adoption = () => {
               {/* 텍스트 정보 */}
               <div className="flex flex-col items-start text-black text-base space-y-1 mr-5 w-full md:w-[360px]">
                 <div className="flex text-xl mb-5 font-bold">
-                  <span className="mr-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-lg bg-green-100 text-green-800 font-bold">{data.state}</span>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-lg ${data.sex === "F" ? "bg-pink-100 text-pink-800" : "bg-blue-100 text-blue-800"}`}>
+                  <span className="mr-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-lg bg-green-100 text-green-800 font-bold">
+                    {data.state}
+                  </span>
+                  <span
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-lg ${data.sex === "F" ? "bg-pink-100 text-pink-800" : "bg-blue-100 text-blue-800"}`}
+                  >
                     {data.sex === "F" ? "암컷" : "수컷"}
                   </span>
                 </div>
@@ -107,7 +116,9 @@ const Adoption = () => {
                   <span>체 중 : {data.kg}</span>
                   <span>보호소명 : {data.shelter}</span>
                   <span>전화번호 : {data.tel}</span>
-                  <span>기간 : {data.begindate}~{data.enddate}</span>
+                  <span>
+                    기간 : {data.begindate}~{data.enddate}
+                  </span>
                 </div>
               </div>
 
@@ -146,7 +157,9 @@ const Adoption = () => {
               window.scrollTo(0, 0); // 페이지 이동 시 상단으로
             }}
             className={`px-4 py-2 rounded-lg font-bold transition-all ${
-              currentPage === number ? "bg-blue-800 text-white scale-110" : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-100"
+              currentPage === number
+                ? "bg-blue-800 text-white scale-110"
+                : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-100"
             }`}
           >
             {number}
