@@ -1,11 +1,12 @@
 "use client";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/scrollbar';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/scrollbar";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
-import { Keyboard, Scrollbar, Pagination, Autoplay } from 'swiper/modules';
+import { Keyboard, Scrollbar, Pagination, Autoplay } from "swiper/modules";
+import Image from "next/image";
 
 const Festival = () => {
   return (
@@ -17,7 +18,7 @@ const Festival = () => {
             <img src="/images/footprint.png" alt="" className="w-10 h-10" />
           </div>
           <div className="pt-10 flex justify-center relative">
-            <Swiper  
+            <Swiper
               slidesPerView={2}
               centeredSlides={false}
               slidesPerGroupSkip={1}
@@ -33,33 +34,74 @@ const Festival = () => {
                 769: {
                   slidesPerView: 2,
                   slidesPerGroup: 2,
-                }
+                },
               }}
               scrollbar={false}
               navigation={false}
               pagination={{ clickable: true }}
               modules={[Keyboard, Scrollbar, Pagination, Autoplay]}
               className="mySwiper "
-              style={{ width: "70%", height: "280px"}}
+              style={{ width: "70%", height: "280px" }}
             >
               <SwiperSlide>
                 <a href="https://ilovepets.co.kr/?main=0">
-                  <img className="rounded-2xl ml-8" style={{ width: "90%", height: "220px" }} src="/images/festival/petandmore.png" alt="" />
+                  <div
+                    className="relative ml-8 rounded-2xl overflow-hidden"
+                    style={{ width: "90%", height: "220px" }}
+                  >
+                    <Image
+                      src="/images/festival/petandmore.png"
+                      alt=""
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
                 </a>
               </SwiperSlide>
               <SwiperSlide>
                 <a href="https://www.pet-show.co.kr/#__890105__item1">
-                  <img className="rounded-2xl ml-8" style={{ width: "90%", height: "220px"}} src="/images/festival/petshow.jpg" alt="" />
+                  <div
+                    className="relative ml-8 rounded-2xl overflow-hidden"
+                    style={{ width: "90%", height: "220px" }}
+                  >
+                    <Image
+                      src="/images/festival/petshow.jpg"
+                      alt=""
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </a>
               </SwiperSlide>
               <SwiperSlide>
                 <a href="https://www.mypetfair.co.kr/">
-                  <img className="rounded-2xl ml-8" style={{ width: "90%", height: "220px"}} src="/images/festival/songdo.jpg" alt="" />
+                  <div
+                    className="relative ml-8 rounded-2xl overflow-hidden"
+                    style={{ width: "90%", height: "220px" }}
+                  >
+                    <Image
+                      src="/images/festival/songdo.jpg"
+                      alt=""
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </a>
               </SwiperSlide>
               <SwiperSlide>
                 <a href="https://cat-show.co.kr/">
-                  <img className="rounded-2xl ml-8" style={{ width: "90%", height: "220px"}} src="/images/festival/nnpunch.png" alt="" />
+                  <div
+                    className="relative ml-8 rounded-2xl overflow-hidden"
+                    style={{ width: "90%", height: "220px" }}
+                  >
+                    <Image
+                      src="/images/festival/nnpunch.png"
+                      alt=""
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </a>
               </SwiperSlide>
             </Swiper>
@@ -67,6 +109,6 @@ const Festival = () => {
         </div>
       </section>
     </>
-  )
+  );
 };
 export default Festival;
