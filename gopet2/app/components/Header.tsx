@@ -3,11 +3,14 @@
 import { FiMenu } from "react-icons/fi";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import NavBar from "./NavBar";
 import { useToggleNav } from "../hooks/useToggleNav";
 
 const Header = () => {
-  const { isNavOpen, toggleNav } = useToggleNav(true);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const { isNavOpen, toggleNav } = useToggleNav(isHome);
   
   return (
     <div className="grid grid-rows-1 grid-cols-1 gap-2 m-5">

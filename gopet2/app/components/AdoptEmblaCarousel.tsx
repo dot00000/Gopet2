@@ -109,6 +109,7 @@ const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
                               fill
                               className="object-cover"
                               priority={index === 0}
+                              unoptimized={true}
                             />
                           </div>
                           <div className="flex flex-col text-base mt-3 space-y-1">

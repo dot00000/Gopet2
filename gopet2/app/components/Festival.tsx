@@ -53,7 +53,7 @@ const Festival = () => {
                       src="/images/festival/petandmore.png"
                       alt=""
                       fill
-                      className="object-cover"
+                      className="object-fill"
                       priority
                     />
                   </div>
@@ -69,7 +69,7 @@ const Festival = () => {
                       src="/images/festival/petshow.jpg"
                       alt=""
                       fill
-                      className="object-cover"
+                      className="object-fill"
                     />
                   </div>
                 </a>
@@ -84,7 +84,7 @@ const Festival = () => {
                       src="/images/festival/songdo.jpg"
                       alt=""
                       fill
-                      className="object-cover"
+                      className="object-fill"
                     />
                   </div>
                 </a>
@@ -99,7 +99,7 @@ const Festival = () => {
                       src="/images/festival/nnpunch.png"
                       alt=""
                       fill
-                      className="object-cover"
+                      className="object-fill"
                     />
                   </div>
                 </a>

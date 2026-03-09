@@ -126,7 +126,7 @@ const Adoption = () => {
               {/* 이미지 */}
               <div className="flex items-center justify-center w-full md:w-1/2 mt-5 md:mt-0">
                 <div className="relative w-full aspect-square md:w-[250px] md:h-[250px] rounded-[20px] overflow-hidden">
-                  <Image src={data.img} alt="" fill className="object-cover" />
+                  <Image src={data.img} alt="" fill className="object-cover" unoptimized={true} />
                 </div>
               </div>
             </div>
