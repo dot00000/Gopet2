@@ -1,4 +1,3 @@
-"use client";
 import AdoptEmblaCarousel from "./components/AdoptEmblaCarousel";
 import Festival from "./components/Festival";
 import Footer from "./components/Footer";
@@ -15,10 +14,9 @@ const SLIDE_COUNT = 8
 const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
 
 export default function Home() {
-  const {isNavOpen, toggleNav} = useToggleNav(true);
   return (
     <>
-      <Header isNavOpen={isNavOpen} toggleNav={toggleNav}/>
+      <Header/>
       <Festival/>
       <Suspense fallback={<NewsSKeleton/>}>
         <NewsList/>

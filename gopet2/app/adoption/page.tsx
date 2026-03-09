@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import Header from "../components/Header";
+import Image from "next/image";
 
 export interface AnimalData {
   identify: string;
@@ -87,7 +88,8 @@ const Adoption = () => {
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <h1 className="flex justify-center text-2xl md:text-3xl mb-10 mt-10 font-bold">
-      💗 보호소 입양</h1>
+        💗 보호소 입양
+      </h1>
 
       {/* 카드 리스트 섹션 */}
       <section className="flex justify-center items-start min-h-[700px]">
@@ -123,15 +125,9 @@ const Adoption = () => {
 
               {/* 이미지 */}
               <div className="flex items-center justify-center w-full md:w-1/2 mt-5 md:mt-0">
-                <div
-                  className="w-full aspect-square md:w-[250px] md:h-[250px]"
-                  style={{
-                    backgroundImage: `url(${data.img})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    borderRadius: "20px",
-                  }}
-                />
+                <div className="relative w-full aspect-square md:w-[250px] md:h-[250px] rounded-[20px] overflow-hidden">
+                  <Image src={data.img} alt="" fill className="object-cover" />
+                </div>
               </div>
             </div>
           ))}

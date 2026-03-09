@@ -1,3 +1,4 @@
+import Image from "next/image";
 
 type Article = {
   title: string;
@@ -14,11 +15,14 @@ const NewsItem = ({ article }: { article: Article }) => {
       <div className="flex flex-col bg-white rounded-3xl w-[90%] md:w-[60%] overflow-hidden shadow-sm">
         {urlToImage && (
           <a href={url} target="_blank" rel="noopener noreferrer">
-            <img
-              src={urlToImage}
-              alt="thumbnail"
-              className="w-full h-[200px] object-cover"
-            />
+            <div className="relative w-full h-[200px]">
+              <Image
+                src={urlToImage}
+                alt="thumbnail"
+                fill
+                className="object-cover"
+              />
+            </div>
           </a>
         )}
         <div className="flex flex-col p-6 space-y-2">

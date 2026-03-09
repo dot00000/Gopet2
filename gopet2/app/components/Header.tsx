@@ -4,13 +4,11 @@ import { FiMenu } from "react-icons/fi";
 import Link from "next/link";
 import Image from "next/image";
 import NavBar from "./NavBar";
-type HeaderProps = {
-  isNavOpen: boolean;
-  toggleNav: () => void;
-}
+import { useToggleNav } from "../hooks/useToggleNav";
 
-
-const Header: React.FC<HeaderProps> = ( {isNavOpen, toggleNav}) => {
+const Header = () => {
+  const { isNavOpen, toggleNav } = useToggleNav(true);
+  
   return (
     <div className="grid grid-rows-1 grid-cols-1 gap-2 m-5">
       <div className="flex items-center">
@@ -36,9 +34,7 @@ const Header: React.FC<HeaderProps> = ( {isNavOpen, toggleNav}) => {
         {isNavOpen && <NavBar />}
       </div>
     </div>
-    
   );
 };
-
 
 export default Header;

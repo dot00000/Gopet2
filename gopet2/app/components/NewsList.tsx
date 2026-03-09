@@ -1,6 +1,8 @@
+"use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import NewsSkeleton from "./Skeleton/NewsSkeleton";
+import Image from "next/image";
 
 type Article = {
   title: string;
@@ -49,7 +51,7 @@ const NewsList = () => {
           />
         </Link>
         {loading ? (
-          <NewsSkeleton/>
+          <NewsSkeleton />
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {articles[0] && (
@@ -61,11 +63,15 @@ const NewsList = () => {
                   className="block relative overflow-hidden rounded-2xl shadow-lg"
                 >
                   {/* 이미지 */}
-                  <img
-                    src={articles[0].urlToImage}
-                    alt="thumbnail"
-                    className="w-full h-[450px] object-cover transition duration-500 group-hover:scale-105"
-                  />
+                  <div className="relative w-full h-[450px] overflow-hidden">
+                    <Image
+                      src={articles[0].urlToImage}
+                      alt="thumbnail"
+                      fill
+                      className="object-cover transition duration-500 group-hover:scale-105"
+                      priority
+                    />
+                  </div>
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
