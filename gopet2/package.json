@@ -11,7 +11,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.90.20",
     "@vercel/blob": "^2.2.0",
-    "axios": "^1.13.5",
+    "axios": "^1.13.6",
     "dotenv": "^17.2.4",
     "embla": "^1.0.0",
     "embla-carousel-auto-scroll": "^8.6.0",

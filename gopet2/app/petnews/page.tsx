@@ -42,13 +42,6 @@ useEffect(() => {
   fetchData();
 }, []);
 
-    if(loading) {
-        
-    }
-    if(!articles){
-        return null;
-    }
-
     // pagination
     const totalItems = articles?.length || 0;
     const totalPages = Math.ceil(totalItems / itemsPerPage);

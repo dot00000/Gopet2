@@ -1,5 +1,6 @@
 import { put, head } from "@vercel/blob";
 import { NextResponse } from "next/server";
+import axios from "axios";
 
 type Article = {
     title: string;
@@ -12,17 +13,21 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 const CACHE_KEY = "newsapi.json";
 
 async function fetchNewsArticles(): Promise<Article[]> {
-    const response = await fetch(
-        `https://newsapi.org/v2/everything?q=반려동물+OR+강아지&language=ko&sortBy=publishedAt&apiKey=${process.env.NEWS_API_KEY}`
-    );
-    const responseData = await response.json();
+    const keywords = ["반려동물", "강아지", "고양이", "펫"];
     
+    const results = await Promise.all(
+        keywords.map(keyword =>
+            axios.get(`https://newsapi.org/v2/everything?q=${keyword}&language=ko&sortBy=publishedAt&pageSize=20&apiKey=${process.env.NEWS_API_KEY}`)
+            .then(res => res.data.articles || [])
+        )
+    );
+
     const articlesMap = new Map<string, Article>();
-    responseData.articles.forEach((article: Article) => {
+    results.flat().forEach((article: Article) => {
         articlesMap.set(article.url, article);
     });
-    const uniqueArticles = Array.from(articlesMap.values());
-    return uniqueArticles.slice(0, 3);
+    
+    return Array.from(articlesMap.values());
 }
 
 export async function GET() {
