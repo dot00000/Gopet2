@@ -6,6 +6,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import "./css/embla.css";
 import Link from "next/link";
+import AdoptEmblaSkeleton from './Skeleton/AdoptEmblaSkeleton';
 
 type PropType = {
   slides: number[];
@@ -87,13 +88,15 @@ const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
           <h5 className="text-xl mb-10 text-center">
             당신의 가족이 되어줄 친구들을 만나보세요
           </h5>
-
-          <div className="flex w-full gap-4 itmes-start">
+          {adoptData.length === 0 ? (
+            <AdoptEmblaSkeleton/>
+          ) : (
+          <div className="hidden md:flex w-full gap-4 itmes-start">
             <div className="embla flex-1 min-w-0">
               <div className="embla__viewport overflow-hidden" ref={emblaRef}>
                 <div className="embla__container flex">
                   {adoptData.map((data: any, index: number) => (
-                    <div className="embla__slide flex-[240px] pr-4" key={index}>
+                    <div className="embla__slide min-w-0 flex-none w-[260px] pr-4" key={index}>
                       <div className="flex flex-col rounded-2xl bg-white w-full h-[340px] p-4 shadow-sm border border-gray-100">
                         <div
                           className="w-full h-[180px] rounded-xl bg-cover bg-center"
@@ -141,6 +144,32 @@ const AdoptEmblaCarousel: React.FC<PropType> = (props) => {
               />
             </div>
           </div>
+          )}
+          <div className="flex md:hidden w-full">
+            <div className="relative w-full rounded-3xl bg-[#f2ece7] h-[340px] px-8 py-6 overflow-hidden shadow-md">
+                <div className="flex flex-col z-10 mt-2">
+                  <p className="text-md text-gray-600 mb-2">
+                    사랑스러운 친구들이
+                  </p>
+                  <h3 className="text-2xl font-bold leading-snug mb-4">
+                    당신을 <br />
+                    기다리고 있어요!
+                  </h3>
+                  <Link
+                    href="/adoption"
+                    className="w-fit bg-[#477b6a] text-white px-5 py-2 rounded-full text-sm font-medium hover:opacity-90 transition"
+                  >
+                    보호소 입양 바로가기
+                  </Link>
+                </div>
+                <img
+                  className="absolute pb-5 right-6 bottom-0 w-[170px] h-auto object-contain"
+                  src="/images/pats.png"
+                  alt=""
+                />
+            </div>
+          </div>
+
         </div>
       </section>
     </>

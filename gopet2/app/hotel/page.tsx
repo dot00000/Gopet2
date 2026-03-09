@@ -11,11 +11,11 @@ import { IoIosArrowForward } from "react-icons/io";
 import { useModalStore } from "../hooks/useModalStore";
 import { HotelData } from "../hooks/useModalStore";
 import { selectRegion } from "../hooks/useRegion";
-import HotelMap from "../components/marker/HotelMarker";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swiper from "swiper";
 import "swiper/css";
+import HotelMarker from "../components/marker/HotelMarker";
 
 export default function Hotel() {
   const { isNavOpen, toggleNav } = useToggleNav(false);
@@ -316,7 +316,7 @@ export default function Hotel() {
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <section className="relative min-h-screen">
-        <HotelMap hotels={hotelData} />
+        <HotelMarker hotels={hotelData} />
         {/* SideBar (Map 위에 포개짐) */}
         <div className="absolute top-0 left-0 min-h-screen z-10">
           <div className="w-[560px]">

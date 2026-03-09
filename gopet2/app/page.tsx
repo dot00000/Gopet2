@@ -4,7 +4,9 @@ import Festival from "./components/Festival";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NewsList from "./components/NewsList";
+import NewsSKeleton from "./components/Skeleton/NewsSkeleton";
 import { useToggleNav } from "./hooks/useToggleNav";
+import { Suspense } from "react";
 import "./globals.css";
 
 const OPTIONS = { loop: true }
@@ -17,7 +19,9 @@ export default function Home() {
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav}/>
       <Festival/>
-      <NewsList/>
+      <Suspense fallback={<NewsSKeleton/>}>
+        <NewsList/>
+      </Suspense>
       <AdoptEmblaCarousel slides={SLIDES} options={OPTIONS}/>
       <Footer/>
     </>

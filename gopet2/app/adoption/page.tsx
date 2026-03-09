@@ -86,9 +86,8 @@ const Adoption = () => {
   return (
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
-      <h1 className="flex justify-center text-3xl mb-10 mt-10 font-bold">
-        💗 보호소 입양
-      </h1>
+      <h1 className="flex justify-center text-2xl md:text-3xl mb-10 mt-10 font-bold">
+      💗 보호소 입양</h1>
 
       {/* 카드 리스트 섹션 */}
       <section className="flex justify-center items-start min-h-[700px]">
@@ -100,17 +99,17 @@ const Adoption = () => {
             >
               {/* 텍스트 정보 */}
               <div className="flex flex-col items-start text-black text-base space-y-1 mr-5 w-full md:w-[360px]">
-                <div className="flex text-xl mb-5 font-bold">
-                  <span className="mr-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-lg bg-green-100 text-green-800 font-bold">
+                <div className="flex mb-5 font-bold">
+                  <span className="mr-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-base md:text-lg bg-green-100 text-green-800 font-bold">
                     {data.state}
                   </span>
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-lg ${data.sex === "F" ? "bg-pink-100 text-pink-800" : "bg-blue-100 text-blue-800"}`}
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-base md:text-lg ${data.sex === "F" ? "bg-pink-100 text-pink-800" : "bg-blue-100 text-blue-800"}`}
                   >
                     {data.sex === "F" ? "암컷" : "수컷"}
                   </span>
                 </div>
-                <div className="flex flex-col text-md space-y-2">
+                <div className="flex flex-col text-sm md:text-base space-y-2">
                   <span className="font-bold">{data.number}</span>
                   <span>나 이 : {data.age}</span>
                   <span>체 중 : {data.kg}</span>

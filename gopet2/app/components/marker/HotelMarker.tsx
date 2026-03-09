@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { HotelData, useModalStore } from "../../hooks/useModalStore";
 import { IoRefresh } from "react-icons/io5";
 
-export default function HotelMap({
+export default function HotelMarker({
   mapId = "map",
   hotels,
 }: {

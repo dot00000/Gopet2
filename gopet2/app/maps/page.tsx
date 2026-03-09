@@ -10,7 +10,7 @@ import { CafeData, FoodData, HospitalData, ParkData, useModalStore } from "../ho
 import { selectRegion } from "../hooks/useRegion";
 import { CgWebsite } from "react-icons/cg";
 import { LuPhone } from "react-icons/lu";
-import TotalMap from "../components/marker/AllMarker";
+import AllMarker from "../components/marker/AllMarker";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swiper from "swiper";
@@ -752,7 +752,7 @@ export default function Maps() {
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <section className="relative min-h-screen">
-        <TotalMap hospital={hospitalData} park={parkData} food={foodData} cafe={cafeData}/>
+        <AllMarker hospital={hospitalData} park={parkData} food={foodData} cafe={cafeData}/>
         <div className="absolute top-0 left-0 min-h-screen z-10">
           <div className="w-[560px]">
             <div className="swiper relative">

@@ -11,7 +11,7 @@ import {
 } from "../../hooks/useModalStore";
 import { IoRefresh } from "react-icons/io5";
 
-export default function TotalMap({
+export default function AllMarker({
   mapId = "map",
   hospital,
   park,

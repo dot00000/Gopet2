@@ -10,28 +10,27 @@ type Article = {
 const NewsItem = ({ article }: { article: Article }) => {
   const { title, description, url, urlToImage, publishedAt } = article;
   return (
-    <div className="flex flex-col justify-center items-center">
-      <div
-        className="flex justify-center items-center bg-gray-300 mb-1 rounded-3xl mb-10"
-        style={{ width: "70%", height: "250px", backgroundColor: "#ffffff"}}
-      >
+    <div className="flex justify-center items-center mb-10">
+      <div className="flex flex-col bg-white rounded-3xl w-[90%] md:w-[70%] overflow-hidden shadow-sm">
         {urlToImage && (
-          <div className="flex justify-center items-center ml-5">
-            <a href={url} target="_blank" rel="noopener noreferrer">
-              <img style={{ minWidth: "200px", height: "180px", marginLeft: "10px"}} src={urlToImage} alt="thumbnail" />
-            </a>
-          </div>
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            <img
+              src={urlToImage}
+              alt="thumbnail"
+              className="w-full h-[200px] object-cover"
+            />
+          </a>
         )}
-        <div className="mr-10">
-          <a 
+        <div className="flex flex-col p-6 space-y-2">
+          <a
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-2xl ml-10 mb-10 font-bold"
+            className="text-xl font-bold hover:underline"
           >
             {title}
           </a>
-          <p className="ml-10">{description}</p>
+          <p className="text-gray-600 text-sm">{description}</p>
         </div>
       </div>
     </div>

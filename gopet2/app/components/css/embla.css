@@ -1,10 +1,27 @@
+
 .embla {
   max-width: 100%;
   --slide-height: 19rem;
   --slide-spacing: 10px;
-  --slide-size: 20%;
+  --slide-size: 260px;
   padding-bottom: 10px;
 }
+
+/* 모바일 (640px 미만) */
+@media (max-width: 639px) {
+  .embla {
+    --slide-size: 80%;
+  }
+}
+
+/* 태블릿 (640px ~ 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+  .embla {
+    --slide-size: 50%;
+  }
+}
+
+
 .embla__viewport {
   overflow: hidden;
 }

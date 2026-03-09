@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useModalStore } from "../../hooks/useModalStore";
 import shelter from "../../assets/json/shelter.json";
 
-export default function ShelterMap({ mapId = "map" }) {
+export default function ShelterMarker({ mapId = "map" }) {
   const { initMap, mapRef } = useNaverMaps();
 
   useEffect(() => {

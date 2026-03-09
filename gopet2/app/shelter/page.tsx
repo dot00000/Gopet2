@@ -8,11 +8,11 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { LuPhone } from "react-icons/lu";
 import { useModalStore, ShelterData } from "../hooks/useModalStore";
+import ShelterMarker from "../components/marker/ShelterMarker";
 import shelter from "../assets/json/shelter.json";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swiper from "swiper";
-import ShelterMap from "../components/marker/ShelterMarker";
 import "swiper/css";
 
 export default function Shelter() {
@@ -203,7 +203,7 @@ export default function Shelter() {
     <>
       <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <section className="relative min-h-screen">
-        <ShelterMap />
+        <ShelterMarker/>
         {/* SideBar (Map 위에 포개짐) */}
         <div className="absolute top-0 left-0 min-h-screen z-10">
           <div className="w-[560px]">

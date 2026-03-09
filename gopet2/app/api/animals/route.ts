@@ -2,21 +2,6 @@ import { head, put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import { xml2json } from 'xml-js';
 
-// type Animal = {
-//     identify: string;
-//     state: string;
-//     image: string;
-//     weight: string;
-//     age: string;
-//     begindate: string;
-//     enddate: string;
-//     sex: string;
-//     lat: number;
-//     long: number;
-//     tel: string;
-//     shelter: string;
-// }
-
 const ONE_DAY = 24 * 60 * 60 * 1000;
 const CACHE_KEY = "animals.json";
 
@@ -27,23 +12,6 @@ async function fetchGgAnimal() {
     const textData = await response.text();
     const jsonData = JSON.parse(xml2json(textData, { compact: true, spaces: 2 }));
     const items = jsonData.AbdmAnimalProtect?.row ?? [];
-
-    // const result = items.map((item: any) => ({
-    //     number: item.ABDM_IDNTFY_NO?._text,
-    //     state: item.STATE_NM?._text,
-    //     img: item.THUMB_IMAGE_COURS?._text,
-    //     kg: item.BDWGH_INFO?._text,
-    //     age: item.AGE_INFO?._text,
-    //     begindate: item.PBLANC_BEGIN_DE?._text,
-    //     enddate: item.PBLANC_END_DE?._text,
-    //     sex: item.SEX_NM?._text,
-    //     lat: parseFloat(item.REFINE_WGS84_LAT?._text),
-    //     lng: parseFloat(item.REFINE_WGS84_LOGT?._text),
-    //     tel: item.SHTER_TELNO?._text,
-    //     shelter: item.SHTER_NM?._text,
-    // }));
-
-    // return result;
 
     return items;
 }

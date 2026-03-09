@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import NewsSkeleton from "./Skeleton/NewsSkeleton";
 
 type Article = {
   title: string;
@@ -48,7 +49,7 @@ const NewsList = () => {
           />
         </Link>
         {loading ? (
-          <div>로딩중...</div>
+          <NewsSkeleton/>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {articles[0] && (
@@ -83,7 +84,7 @@ const NewsList = () => {
               </div>
             )}
 
-            {/* 🗞 오른쪽 작은 뉴스 2개 */}
+            {/* 오른쪽 작은 뉴스 2개 */}
             <div className="flex flex-col gap-6 justify-center">
               {articles.slice(1, 3).map((article, index) => (
                 <a
