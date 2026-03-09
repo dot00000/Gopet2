@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NewsList from "./components/NewsList";
 import NewsSKeleton from "./components/Skeleton/NewsSkeleton";
+import AdoptEmblaSkeleton from "./components/Skeleton/AdoptEmblaSkeleton";
 import { useToggleNav } from "./hooks/useToggleNav";
 import { Suspense } from "react";
 import "./globals.css";
@@ -22,7 +23,9 @@ export default function Home() {
       <Suspense fallback={<NewsSKeleton/>}>
         <NewsList/>
       </Suspense>
-      <AdoptEmblaCarousel slides={SLIDES} options={OPTIONS}/>
+      <Suspense fallback={<AdoptEmblaSkeleton/>}>
+        <AdoptEmblaCarousel slides={SLIDES} options={OPTIONS}/>
+      </Suspense>
       <Footer/>
     </>
   );
