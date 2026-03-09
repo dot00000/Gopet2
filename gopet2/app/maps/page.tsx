@@ -750,7 +750,7 @@ export default function Maps() {
   ];
   return (
     <>
-      <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
+      <Header/>
       <section className="relative min-h-screen">
         <AllMarker hospital={hospitalData} park={parkData} food={foodData} cafe={cafeData}/>
         <div className="absolute top-0 left-0 min-h-screen z-10">

@@ -86,7 +86,7 @@ const Adoption = () => {
 
   return (
     <>
-      <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
+      <Header/>
       <h1 className="flex justify-center text-2xl md:text-3xl mb-10 mt-10 font-bold">
         💗 보호소 입양
       </h1>

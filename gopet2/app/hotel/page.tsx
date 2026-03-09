@@ -314,7 +314,7 @@ export default function Hotel() {
   ];
   return (
     <>
-      <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
+      <Header />
       <section className="relative min-h-screen">
         <HotelMarker hotels={hotelData} />
         {/* SideBar (Map 위에 포개짐) */}

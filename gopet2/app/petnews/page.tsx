@@ -56,7 +56,7 @@ useEffect(() => {
 
     return (
         <>
-            <Header isNavOpen={isNavOpen} toggleNav={toggleNav} />
+            <Header/>
             <section>
                 <h1 className="flex justify-center text-2xl md:text-3xl p-10 font-bold">🐾 반려동물 News</h1>
                 {currentItems.map(article => {
