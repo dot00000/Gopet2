@@ -15,7 +15,7 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 const CACHE_KEY = "newsapi.json";
 
 async function fetchNewsArticles(): Promise<Article[]> {
-    const keywords = ["반려동물", "강아지", "고양이", "펫", "유기동물", "동물병원", "펫푸드", "동물보호"];
+    const keywords = ["반려동물", "강아지", "고양이", "펫"];
     
     const results = await Promise.all(
         keywords.map(keyword =>
@@ -26,7 +26,7 @@ async function fetchNewsArticles(): Promise<Article[]> {
 
     const articlesMap = new Map<string, Article>();
     results.flat().forEach((article: Article) => {
-        articlesMap.set(article.link, article); 
+        articlesMap.set(article.link, article);  
     });
     
     return Array.from(articlesMap.values());
