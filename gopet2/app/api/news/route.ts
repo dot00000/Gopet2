@@ -20,13 +20,13 @@ async function fetchNewsArticles(): Promise<Article[]> {
     const results = await Promise.all(
         keywords.map(keyword =>
             axios.get(`https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`)
-            .then(res => res.data.results || [])  // articles → results
+            .then(res => res.data.results || [])  
         )
     );
 
     const articlesMap = new Map<string, Article>();
     results.flat().forEach((article: Article) => {
-        articlesMap.set(article.link, article);  // url → link
+        articlesMap.set(article.link, article); 
     });
     
     return Array.from(articlesMap.values());
