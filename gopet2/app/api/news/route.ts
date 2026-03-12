@@ -17,18 +17,23 @@ const CACHE_KEY = "newsapi.json";
 async function fetchNewsArticles(): Promise<Article[]> {
     const keywords = ["반려동물", "강아지", "고양이", "펫"];
     
-    const results = await Promise.all(
-        keywords.map(keyword =>
-            axios.get(`https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`)
-            .then(res => res.data.results || [])  
-        )
-    );
-
     const articlesMap = new Map<string, Article>();
-    results.flat().forEach((article: Article) => {
-        articlesMap.set(article.link, article);  
-    });
-    
+
+    for (const keyword of keywords) {
+        try {
+            const res = await axios.get(
+                `https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`
+            );
+            const articles = res.data.results || [];
+            articles.forEach((article: Article) => {
+                articlesMap.set(article.link, article);
+            });
+
+            await new Promise(resolve => setTimeout(resolve, 1000)); 
+        } catch (err) {
+            console.error(`키워드 "${keyword}" 요청 실패:`, err);
+        }
+    }
     return Array.from(articlesMap.values());
 }
 
