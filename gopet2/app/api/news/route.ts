@@ -5,8 +5,10 @@ import axios from "axios";
 type Article = {
     title: string;
     description: string;
-    url: string;
-    urlToImage: string;
+    link: string;        // url → link
+    image_url: string;   // urlToImage → image_url
+    pubDate: string;     // 추가: 발행일
+    source_id: string;   // 추가: 출처
 }
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
@@ -17,14 +19,14 @@ async function fetchNewsArticles(): Promise<Article[]> {
     
     const results = await Promise.all(
         keywords.map(keyword =>
-            axios.get(`https://newsapi.org/v2/everything?q=${keyword}&language=ko&sortBy=publishedAt&pageSize=20&apiKey=${process.env.NEWS_API_KEY}`)
-            .then(res => res.data.articles || [])
+            axios.get(`https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`)
+            .then(res => res.data.results || [])  // articles → results
         )
     );
 
     const articlesMap = new Map<string, Article>();
     results.flat().forEach((article: Article) => {
-        articlesMap.set(article.url, article);
+        articlesMap.set(article.link, article);  // url → link
     });
     
     return Array.from(articlesMap.values());
@@ -32,7 +34,6 @@ async function fetchNewsArticles(): Promise<Article[]> {
 
 export async function GET() {
     try {
-        // 1. 캐시부터 확인
         let cachedData = null;
         
         try {
@@ -42,11 +43,10 @@ export async function GET() {
                 const uploadTime = new Date(blobInfo.uploadedAt).getTime();
                 const now = Date.now();
                 
-                // 하루 안 지났으면 캐시 사용
                 if (now - uploadTime < ONE_DAY) {
                     const blobResponse = await fetch(blobInfo.url);
-                    const blobText = await blobResponse.text(); // JSON 문자열로 받기
-                    cachedData = JSON.parse(blobText); // 직접 파싱
+                    const blobText = await blobResponse.text();
+                    cachedData = JSON.parse(blobText);
                     
                     return NextResponse.json({
                         success: true,
@@ -57,13 +57,10 @@ export async function GET() {
             }
         } catch (cacheError) {
             console.log('Cache miss or error:', cacheError);
-            // 캐시 없음 → 새로 가져오기
         }
 
-        // 2. 새로운 데이터 가져오기
         const freshData = await fetchNewsArticles();
         
-        // 3. Blob에 저장
         await put(CACHE_KEY, JSON.stringify(freshData), {
             access: "public",
             contentType: "application/json",

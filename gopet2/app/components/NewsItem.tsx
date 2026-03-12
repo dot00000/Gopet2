@@ -3,21 +3,21 @@ import Image from "next/image";
 type Article = {
   title: string;
   description: string;
-  url: string;
-  urlToImage: string;
-  publishedAt: string;
+  link: string;
+  image_url: string;
+  pubDate: string;
 };
 
 const NewsItem = ({ article }: { article: Article }) => {
-  const { title, description, url, urlToImage, publishedAt } = article;
+  const { title, description, link, image_url, pubDate } = article;
   return (
     <div className="flex justify-center items-center mb-10">
       <div className="flex flex-col bg-white rounded-3xl w-[90%] md:w-[60%] overflow-hidden shadow-sm">
-        {urlToImage && (
-          <a href={url} target="_blank" rel="noopener noreferrer">
+        {image_url && (
+          <a href={link} target="_blank" rel="noopener noreferrer">
             <div className="relative w-full h-[200px]">
               <Image
-                src={urlToImage}
+                src={image_url}
                 alt="thumbnail"
                 fill
                 className="object-cover"
@@ -27,7 +27,7 @@ const NewsItem = ({ article }: { article: Article }) => {
         )}
         <div className="flex flex-col p-6 space-y-2">
           <a
-            href={url}
+            href={link}
             target="_blank"
             rel="noopener noreferrer"
             className="text-xl font-bold hover:underline"
