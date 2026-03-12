@@ -15,7 +15,7 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 const CACHE_KEY = "newsapi.json";
 
 async function fetchNewsArticles(): Promise<Article[]> {
-    const keywords = ["반려동물", "강아지", "고양이", "펫", "반려동물 건강", "유기동물", "유기견", "동물보호", "펫케어", "동물병원", "펫시터", "반려묘", "사료"];
+    const keywords = ["반려동물", "강아지", "고양이", "펫", "유기동물", "동물병원", "펫푸드", "동물보호"];
     
     const results = await Promise.all(
         keywords.map(keyword =>
