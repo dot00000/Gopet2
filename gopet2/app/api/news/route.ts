@@ -5,17 +5,17 @@ import axios from "axios";
 type Article = {
     title: string;
     description: string;
-    link: string;        // url → link
-    image_url: string;   // urlToImage → image_url
-    pubDate: string;     // 추가: 발행일
-    source_id: string;   // 추가: 출처
+    link: string;        
+    image_url: string;   
+    pubDate: string;     
+    source_id: string;   
 }
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
 const CACHE_KEY = "newsapi.json";
 
 async function fetchNewsArticles(): Promise<Article[]> {
-    const keywords = ["반려동물", "강아지", "고양이", "펫"];
+    const keywords = ["반려동물", "강아지", "고양이", "펫", "반려동물 건강", "유기동물", "유기견", "동물보호", "펫케어", "동물병원", "펫시터", "반려묘", "사료"];
     
     const results = await Promise.all(
         keywords.map(keyword =>
