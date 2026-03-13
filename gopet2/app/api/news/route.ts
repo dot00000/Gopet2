@@ -21,7 +21,7 @@ async function fetchNewsArticles(): Promise<Article[]> {
   for (const keyword of keywords) {
     try {
       const res = await axios.get(
-        `https://gnews.io/api/v4/search?q=${keyword}&lang=ko&apikey=${process.env.GNEWS_API_KEY}`,
+        `https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`
       );
       const articles = res.data.results || [];
       articles.forEach((article: Article) => {
