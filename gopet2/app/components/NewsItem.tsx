@@ -1,4 +1,3 @@
-import Image from "next/image";
 
 type Article = {
   title: string;
@@ -16,11 +15,13 @@ const NewsItem = ({ article }: { article: Article }) => {
         {image_url && (
           <a href={link} target="_blank" rel="noopener noreferrer">
             <div className="relative w-full h-[200px]">
-              <Image
+              <img
                 src={image_url}
                 alt="thumbnail"
-                fill
-                className="object-cover"
+                className="w-full h-full object-cover"
+                onError={(e) =>
+                  (e.currentTarget.parentElement!.style.display = "none")
+                }
               />
             </div>
           </a>
