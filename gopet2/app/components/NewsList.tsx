@@ -6,9 +6,9 @@ import NewsSkeleton from "./Skeleton/NewsSkeleton";
 type Article = {
   title: string;
   description: string;
-  url: string;
-  image: string;
-  publishedAt: string;
+  link: string;
+  image_url: string;
+  pubDate: string;
 };
 
 const NewsList = () => {
@@ -56,7 +56,7 @@ const NewsList = () => {
             {articles[0] && (
               <div className="lg:col-span-2 group cursor-pointer">
                 <a
-                  href={articles[0].url}
+                  href={articles[0].link}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block relative overflow-hidden rounded-2xl shadow-lg"
@@ -64,7 +64,7 @@ const NewsList = () => {
                   {/* 이미지 */}
                   <div className="relative w-full h-[450px] overflow-hidden">
                     <img
-                      src={articles[0].image}
+                      src={articles[0].image_url}
                       alt="thumbnail"
                       className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
                       onError={(e) => {
@@ -79,7 +79,7 @@ const NewsList = () => {
                       {articles[0].title}
                     </h2>
                     <p className="text-sm mb-2 opacity-80">
-                      {articles[0].publishedAt.slice(0, 10)}
+                      {articles[0].pubDate.slice(0, 10)}
                     </p>
 
                     <p className="mt-3 line-clamp-2 opacity-90">
@@ -95,7 +95,7 @@ const NewsList = () => {
               {articles.slice(1, 3).map((article, index) => (
                 <a
                   key={index}
-                  href={article.url}
+                  href={article.link}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-[400px] h-[210px] flex gap-4 group cursor-pointer rounded-2xl items-center bg-white p-6 shadow-lg hover:shadow-xl transition duration-300"
@@ -107,10 +107,10 @@ const NewsList = () => {
                     paddingBottom: "25px",
                   }}
                 >
-                  {article.image && (
+                  {article.image_url && (
                     <div className="w-40 h-30 overflow-hidden rounded-xl flex-shrink-0">
                       <img
-                        src={article.image}
+                        src={article.image_url}
                         alt="thumbnail"
                         className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
                         onError={(e) => {
@@ -127,7 +127,7 @@ const NewsList = () => {
                       {article.title}
                     </h3>
                     <h3 className="text-gray-600 mt-5 line-clamp-3">
-                      {article.publishedAt.slice(0, 10)}
+                      {article.pubDate.slice(0, 10)}
                     </h3>
                   </div>
                 </a>

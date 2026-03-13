@@ -10,9 +10,9 @@ import Header from "../components/Header";
 type Article = {
   title: string;
   description: string;
-  url: string;
-  image: string;
-  publishedAt: string;
+  link: string;
+  image_url: string;
+  pubDate: string;
 };
 
 export default function PetNews() {
@@ -65,7 +65,7 @@ export default function PetNews() {
           🐾 반려동물 News
         </h1>
         {currentItems.map((article) => {
-          return <NewsItem key={article.url} article={article} />;
+          return <NewsItem key={article.link} article={article} />;
         })}
       </section>
       <section className="flex justify-center items-center space-x-2 my-5 pb-20">
