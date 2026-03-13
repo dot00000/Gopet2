@@ -13,6 +13,14 @@ type Article = {
 const ONE_DAY = 24 * 60 * 60 * 1000;
 const CACHE_KEY = "newsapi.json";
 
+function normalizeText(text: string) {
+  return text
+    .replace(/[^\w\s가-힣]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
 async function fetchNewsArticles(): Promise<Article[]> {
   const keywords = ["반려동물", "강아지", "고양이", "펫"];
 
@@ -21,7 +29,7 @@ async function fetchNewsArticles(): Promise<Article[]> {
   for (const keyword of keywords) {
     try {
       const res = await axios.get(
-        `https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`,
+        `https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`
       );
       const articles = res.data.results || [];
       articles.forEach((article: Article) => {
@@ -33,16 +41,19 @@ async function fetchNewsArticles(): Promise<Article[]> {
       console.error(`키워드 "${keyword}" 요청 실패:`, err);
     }
   }
-  const descSet = new Set<string>();
+  const seen = new Set<string>();
 
-  return Array.from(articlesMap.values()).filter((article) => {
-    const key = article.description?.slice(0, 100).trim().toLowerCase();
+return Array.from(articlesMap.values()).filter((article) => {
+  const title = normalizeText(article.title || "").slice(0, 50);
+  const desc = normalizeText(article.description || "").slice(0, 80);
 
-    if (!key || descSet.has(key)) return false;
+  const key = `${title}_${desc}`;
 
-    descSet.add(key);
-    return true;
-  });
+  if (seen.has(key)) return false;
+
+  seen.add(key);
+  return true;
+});
 }
 
 export async function GET() {
