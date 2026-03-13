@@ -13,6 +13,19 @@ type Article = {
 const ONE_DAY = 24 * 60 * 60 * 1000;
 const CACHE_KEY = "newsapi.json";
 
+function isSimilarTitle(a: string, b: string): boolean {
+  const keywordsA = a.match(/\d+일|\d+월|[가-힣]{2,}/g) || [];
+  const keywordsB = b.match(/\d+일|\d+월|[가-힣]{2,}/g) || [];
+
+  if (keywordsA.length < 3 || keywordsB.length < 3) {
+    return a.includes(b) || b.includes(a);
+  }
+
+  const matchCount = keywordsA.filter((word) => b.includes(word)).length;
+  return matchCount >= 3;
+}
+
+
 async function fetchNewsArticles(): Promise<Article[]> {
   const keywords = ["반려동물", "강아지", "고양이", "펫"];
 
@@ -21,7 +34,7 @@ async function fetchNewsArticles(): Promise<Article[]> {
   for (const keyword of keywords) {
     try {
       const res = await axios.get(
-        `https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`
+        `https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`,
       );
       const articles = res.data.results || [];
       articles.forEach((article: Article) => {
@@ -33,13 +46,21 @@ async function fetchNewsArticles(): Promise<Article[]> {
       console.error(`키워드 "${keyword}" 요청 실패:`, err);
     }
   }
-  const titleSet = new Set<string>();
-  return Array.from(articlesMap.values()).filter((article) => {
-    const key = article.title?.trim().toLowerCase();
-    if (!key || titleSet.has(key)) return false;
-    titleSet.add(key);
-    return true;
-  });
+  const titleList: Array<{ title: string; date: string }> = [];
+
+return Array.from(articlesMap.values()).filter((article) => {
+  const title = article.title?.trim();
+  const date = article.pubDate?.slice(0, 10);
+  if (!title || !date) return false;
+
+  const isDuplicate = titleList.some(
+    (existing) => existing.date === date && isSimilarTitle(existing.title, title)
+  );
+  if (isDuplicate) return false;
+
+  titleList.push({ title, date });
+  return true;
+});
 }
 
 export async function GET() {
