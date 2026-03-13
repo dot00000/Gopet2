@@ -5,9 +5,9 @@ import axios from "axios";
 type Article = {
   title: string;
   description: string;
-  url: string;
-  image: string;
-  publishedAt: string;
+  link: string;
+  image_url: string;
+  pubDate: string;
 };
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
@@ -25,7 +25,7 @@ async function fetchNewsArticles(): Promise<Article[]> {
       );
       const articles = res.data.results || [];
       articles.forEach((article: Article) => {
-        articlesMap.set(article.url, article);
+        articlesMap.set(article.link, article);
       });
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
