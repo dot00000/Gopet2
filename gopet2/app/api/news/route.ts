@@ -21,7 +21,7 @@ async function fetchNewsArticles(): Promise<Article[]> {
   for (const keyword of keywords) {
     try {
       const res = await axios.get(
-        `https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`
+        `https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`,
       );
       const articles = res.data.results || [];
       articles.forEach((article: Article) => {
@@ -33,11 +33,14 @@ async function fetchNewsArticles(): Promise<Article[]> {
       console.error(`키워드 "${keyword}" 요청 실패:`, err);
     }
   }
-  const titleSet = new Set<string>();
+  const descSet = new Set<string>();
+
   return Array.from(articlesMap.values()).filter((article) => {
-    const key = article.title?.trim().toLowerCase();
-    if (!key || titleSet.has(key)) return false;
-    titleSet.add(key);
+    const key = article.description?.slice(0, 100).trim().toLowerCase();
+
+    if (!key || descSet.has(key)) return false;
+
+    descSet.add(key);
     return true;
   });
 }
