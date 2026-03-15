@@ -20,8 +20,9 @@ async function fetchNewsArticles(): Promise<Article[]> {
 
   for (const keyword of keywords) {
     try {
+      const language = keyword === "dog" ? "en" : "ko";
       const res = await axios.get(
-        `https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=ko`
+        `https://newsdata.io/api/1/latest?apikey=${process.env.NEWS_DATA_IO_KEY}&q=${keyword}&language=${language}`
       );
       const articles = res.data.results || [];
       articles.forEach((article: Article) => {
