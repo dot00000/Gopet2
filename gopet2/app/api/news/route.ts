@@ -14,7 +14,7 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 const CACHE_KEY = "newsapi.json";
 
 async function fetchNewsArticles(): Promise<Article[]> {
-  const keywords = ["dog", "반려동물", "강아지", "고양이", "펫"];
+  const keywords = ["dog", "반려동물", "강아지", "펫"]; // 무료플랜 키워드 4개 제한
 
   const articlesMap = new Map<string, Article>();
 
