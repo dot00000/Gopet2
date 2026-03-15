@@ -122,9 +122,9 @@ const NewsList = () => {
                   <div>
                     <h3
                       className="text-lg font-semibold leading-snug"
-                      style={{ width: "180px" }}
+                      style={{ width: "180px"}}
                     >
-                      {article.title}
+                      {article.title.slice(0, 70)}
                     </h3>
                     <h3 className="text-gray-600 mt-5 line-clamp-3">
                       {article.pubDate.slice(0, 10)}
