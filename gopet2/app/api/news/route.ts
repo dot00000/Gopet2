@@ -44,7 +44,7 @@ async function fetchNewsArticles(): Promise<Article[]> {
 
 export async function GET() {
   try {
-    let cachedData = null;
+    let cacheUrl: string | null = null;
 
     try {
       const blobInfo = await head(CACHE_KEY);
@@ -52,11 +52,13 @@ export async function GET() {
       if (blobInfo) {
         const uploadTime = new Date(blobInfo.uploadedAt).getTime();
         const now = Date.now();
+        cacheUrl = blobInfo.url;
 
+        // 캐시가 유효하면 그대로 반환
         if (now - uploadTime < ONE_DAY) {
           const blobResponse = await fetch(blobInfo.url);
           const blobText = await blobResponse.text();
-          cachedData = JSON.parse(blobText);
+          const cachedData = JSON.parse(blobText);
 
           return NextResponse.json({
             success: true,
@@ -71,7 +73,39 @@ export async function GET() {
 
     const freshData = await fetchNewsArticles();
 
-    await put(CACHE_KEY, JSON.stringify(freshData), {
+    // 기존 캐시 불러오기
+    let existingData: Article[] = [];
+    if (cacheUrl) {
+      try {
+        const blobResponse = await fetch(cacheUrl);
+        const blobText = await blobResponse.text();
+        existingData = JSON.parse(blobText);
+      } catch (e) {
+        console.log("기존 캐시 파싱 실패:", e);
+      }
+    }
+
+    // 새 데이터가 없으면 기존 캐시 그대로 반환
+    if (freshData.length === 0) {
+      return NextResponse.json({
+        success: true,
+        data: existingData,
+        cached: true,
+        fallback: true,
+      });
+    }
+
+    // 새 데이터 + 기존 데이터 합치기 (link 기준 중복 제거)
+    const merged = [...freshData, ...existingData];
+    const deduped = Array.from(
+      new Map(merged.map((a) => [a.link, a])).values()
+    );
+
+    const sorted = deduped
+      .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+      .slice(0, 20);
+
+    await put(CACHE_KEY, JSON.stringify(sorted), {
       access: "public",
       contentType: "application/json",
       addRandomSuffix: false,
@@ -80,7 +114,7 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      data: freshData,
+      data: sorted,
       cached: false,
     });
   } catch (err) {
