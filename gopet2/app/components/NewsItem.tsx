@@ -17,11 +17,11 @@ const NewsItem = ({ article }: { article: Article }) => {
             <div className="relative w-full h-[200px]">
               <img
                 src={image_url}
-                alt="thumbnail"
+                alt="이미지 없음"
                 className="w-full h-full object-cover"
-                onError={(e) =>
-                  (e.currentTarget.parentElement!.style.display = "none")
-                }
+                // onError={(e) =>
+                //   (e.currentTarget.parentElement!.style.display = "none")
+                // }
               />
             </div>
           </a>
@@ -35,7 +35,7 @@ const NewsItem = ({ article }: { article: Article }) => {
           >
             {title}
           </a>
-          <p className="text-gray-600 text-sm">{description}</p>
+          <p className="text-gray-600 text-sm line-clamp-3">{description}</p>
         </div>
       </div>
     </div>

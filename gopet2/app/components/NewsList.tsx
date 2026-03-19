@@ -65,11 +65,8 @@ const NewsList = () => {
                   <div className="relative w-full h-[450px] overflow-hidden">
                     <img
                       src={articles[0].image_url}
-                      alt="thumbnail"
+                      alt="이미지 없음"
                       className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-                      onError={(e) => {
-                        e.currentTarget.parentElement!.style.display = "none";
-                      }}
                     />
                   </div>
 
@@ -111,20 +108,20 @@ const NewsList = () => {
                     <div className="w-40 h-30 overflow-hidden rounded-xl flex-shrink-0">
                       <img
                         src={article.image_url}
-                        alt="thumbnail"
+                        alt="이미지 없음"
                         className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
-                        onError={(e) => {
-                          e.currentTarget.parentElement!.style.display = "none";
-                        }}
+                        // onError={(e) => {
+                        //   e.currentTarget.parentElement!.style.display = "none";
+                        // }}
                       />
                     </div>
                   )}
                   <div>
                     <h3
-                      className="text-lg font-semibold leading-snug"
+                      className="text-lg font-semibold leading-snug line-clamp-2"
                       style={{ width: "180px"}}
                     >
-                      {article.title.slice(0, 70)}
+                      {article.title}
                     </h3>
                     <h3 className="text-gray-600 mt-5 line-clamp-3">
                       {article.pubDate.slice(0, 10)}
