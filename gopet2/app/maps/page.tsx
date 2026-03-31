@@ -41,6 +41,7 @@ export default function Maps() {
   const [cafeData, setCafeData] = useState<CafeData[]>([]);
 
   useEffect(() => {
+    const controller = new AbortController()
     const fetchData = async () => {
       try {
         const res = await fetch("/api/kcisa");
@@ -62,17 +63,17 @@ export default function Maps() {
               gungu: item.gungu,
             }));
         };
-        console.log(json);
-        
         setHospitalData(filteredMap("동물병원", "hospital"));
         setParkData(filteredMap("여행지", "park"));
         setCafeData(filteredMap("카페", "cafe"));
         setFoodData(filteredMap("식당", "food"));
       } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') return;
         console.log(err);
       }
     };
     fetchData();
+    return () => controller.abort()
   }, []);
 
   // swiper

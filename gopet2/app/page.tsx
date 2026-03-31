@@ -5,7 +5,6 @@ import Header from "./components/Header";
 import NewsList from "./components/NewsList";
 import NewsSKeleton from "./components/Skeleton/NewsSkeleton";
 import AdoptEmblaSkeleton from "./components/Skeleton/AdoptEmblaSkeleton";
-import { useToggleNav } from "./hooks/useToggleNav";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -17,7 +16,7 @@ export default function Home() {
   return (
     <>
       <Header/>
-      <Festival/>
+        <Festival/>
       <Suspense fallback={<NewsSKeleton/>}>
         <NewsList/>
       </Suspense>

@@ -87,7 +87,6 @@ export default function ShelterMarker({ mapId = "map" }) {
 
       return marker;
     });
-
     setShelterMarkers(newMarkers);
   };
   // 보호소 버튼

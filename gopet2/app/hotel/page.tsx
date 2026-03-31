@@ -43,9 +43,10 @@ export default function Hotel() {
   // 호텔 data가져오기
   const [hotelData, setHotelData] = useState<HotelData[]>([]);
   useEffect(() => {
+    const controller = new AbortController()
     const fetchHotels = async () => {
       try {
-        const res = await fetch("/api/kcisa");
+        const res = await fetch("/api/kcisa", { signal: controller.signal});
         const json = await res.json();
         const hotels: HotelData[] = (json.data || [])
           .filter((item: any) => item.category2 === "펜션")
@@ -62,21 +63,22 @@ export default function Hotel() {
             si: item.si,
             gungu: item.gungu,
           }));
-        console.log(json);
-        
         setHotelData(hotels);
       } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') return;
         console.log(err);
       }
+      
     };
-    fetchHotels();
+    fetchHotels()
+    return () => controller.abort()
   }, []);
   
   const filteredData = hotelData.filter((data) => {
-    if (!selectedLocation.si) return true;
-    if (selectedLocation.si && !selectedLocation.gungu) {
-      return data.si === selectedLocation.si;
-    }
+      if (!selectedLocation.si) return false;
+      if (selectedLocation.si && !selectedLocation.gungu) {
+        return data.si === selectedLocation.si;
+      }
     return data.si === selectedLocation.si && data.gungu === selectedLocation.gungu
   });
   // swiper

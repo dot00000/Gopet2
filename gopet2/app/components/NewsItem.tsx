@@ -17,11 +17,7 @@ const NewsItem = ({ article }: { article: Article }) => {
             <div className="relative w-full h-[200px]">
               <img
                 src={image_url}
-                alt="이미지 없음"
                 className="w-full h-full object-cover"
-                // onError={(e) =>
-                //   (e.currentTarget.parentElement!.style.display = "none")
-                // }
               />
             </div>
           </a>

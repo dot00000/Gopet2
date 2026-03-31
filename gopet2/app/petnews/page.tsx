@@ -26,20 +26,24 @@ export default function PetNews() {
   const pageLimit = 5;
 
   useEffect(() => {
+    const controller = new AbortController()
     const fetchData = async () => {
       try {
         const res = await fetch("/api/news");
         const response = await res.json();
         setArticles(response.data || []);
+        console.log(response);
+        
       } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return;
         console.error(e);
         setArticles([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
+    return () => controller.abort()
   }, []);
 
   // pagination

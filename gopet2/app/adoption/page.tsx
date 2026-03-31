@@ -34,6 +34,7 @@ const Adoption = () => {
   const today = new Date().toISOString().split("T")[0].replace(/-/g, "");
 
   useEffect(() => {
+    const controller = new AbortController()
     const fetchData = async () => {
       try {
         const res = await fetch("/api/animals");
@@ -59,7 +60,10 @@ const Adoption = () => {
             shelter: item.SHTER_NM?._text,
           }));
         setAnimalData(filtered);
+        console.log(data);
+        
       } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return;
         console.error(e);
         setAnimalData([]);
       } finally {
@@ -67,6 +71,7 @@ const Adoption = () => {
       }
     };
     fetchData();
+    return () => controller.abort()
   }, []);
 
   // pagination 데이터
@@ -143,7 +148,6 @@ const Adoption = () => {
         >
           <IoIosArrowBack />
         </button>
-
         {pageNumbers.map((number) => (
           <button
             key={number}
@@ -160,7 +164,6 @@ const Adoption = () => {
             {number}
           </button>
         ))}
-
         <button
           onClick={() => setCurrentPage(endPage + 1)}
           disabled={endPage === totalPages}
