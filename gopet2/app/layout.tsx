@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import PageUpButton from "./components/PageUpButton";
-import Providers from "./Providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,7 +29,7 @@ export default function RootLayout({
         />
 
         <main className="relative z-10 w-full">
-          <Providers>{children}</Providers>
+          {children}
           <PageUpButton />
         </main>
       </body>
